@@ -1,0 +1,17 @@
+{
+  "name": "ahorrapp",
+  "authors": [
+    "Daniel Arevalo <acuentas9508@hotmail.com>"
+  ],
+  "description": "ahorrapp Es una app movil y web en la cual ahorrar y administrar tu sueldo no sera una obligacion si no un habito con ella podras administrar bien tus gastos y proponerte a cumplir cual quier sueño que tengas, comprar casa , irte de viaje con ahorrapp sera posible ya que puedes crear metas a corto,mediano y largo plazo para que cumplas tus sueños ahorrapp ahorra no es una obligacion es un habito",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "static/bower_components",
+    "test",
+    "tests"
+  ]
+}

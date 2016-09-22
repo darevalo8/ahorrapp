@@ -1,9 +1,10 @@
 from unipath import Path
-
+#SETTINGS_DIR = Path(".").absolute()
+#BASE_DIR = SETTINGS_DIR
 BASE_DIR = Path(__file__).ancestor(3)
-STATIC_ROOT = BASE_DIR.child("static")
+STATIC_ROOT = BASE_DIR.child("assets")
 STATICFILES_DIRS = (
-	BASE_DIR.child("assets"),
+	BASE_DIR.child("static"),
 )
 SECRET_KEY = 'hc0zl8e2mw=8#4k_!ck51l!a*)he$r0!4bt@7m)&9yh%frynsq'
 
@@ -32,7 +33,9 @@ DJANGO_APPS = (
 
 THIRD_PARTY_APPS = ()
 
-LOCAL_APPS = ()
+LOCAL_APPS = (
+	'users',
+)
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -54,7 +57,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ahorrapp.wsgi.application'
 
-LANGUAGE_CODE = 'es-es'
+LANGUAGE_CODE = 'en-en'
 
 TIME_ZONE = 'America/Bogota'
 
