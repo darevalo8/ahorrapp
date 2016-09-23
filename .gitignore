@@ -5,3 +5,5 @@ __pycache__
 # Pycharm
 .idea/*
 ahorrapp/.idea/*
+
+ahorrapp/static/babower_components/*
