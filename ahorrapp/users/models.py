@@ -4,5 +4,5 @@ from django.core.urlresolvers import reverse
 
 
 class UserProfile(User):
-	def get_absolute_url(self):
-		return reverse('users:home')
+    def get_absolute_url(self):
+        return reverse('users:home')
