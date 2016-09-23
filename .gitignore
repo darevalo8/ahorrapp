@@ -6,4 +6,4 @@ __pycache__
 .idea/*
 ahorrapp/.idea/*
 
-ahorrapp/static/babower_components/*
+ahorrapp/static/bower_components/*

@@ -13,5 +13,8 @@
     "static/bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "materialize": "^0.97.7"
+  }
 }
