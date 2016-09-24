@@ -10,10 +10,15 @@
     {% if user.is_authenticated %}
         <h1>Hola {{ user.get_full_name }}</h1>
         <a href="{% url 'users:logout' %}">cerrar sesion</a>
+        <a href="{% url 'users:password_change' %}">cambiar contraseña</a>
     {% else %}
         <h1>Hola</h1>
         <a href="{% url 'users:login' %}">login</a>
         <a href="{% url 'users:register_user' %}">Registro de usuario</a>
+        <h4>Accede con tus redes sociales</h4>
+        <ul>
+            <li><a href="{% url 'social:begin' 'facebook' %}">Facebook</a></li>
+        </ul>
     {% endif %}
     <a href="{% url 'users:home' %}">Home</a>
 
