@@ -1,5 +1,9 @@
+import os
 from .base import *
 
+SECRET_KEY = os.environ["LLAVE"]
+DEBUG = True
+ALLOWED_HOSTS = []
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',

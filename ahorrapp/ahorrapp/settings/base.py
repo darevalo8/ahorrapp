@@ -1,13 +1,11 @@
-from unipath import Path
 from django.core.urlresolvers import reverse_lazy
+from unipath import Path
 
 LOGIN_URL = reverse_lazy('users:login')
 LOGIN_REDIRECT_URL = reverse_lazy('users:home')
 LOGOUT_URL = reverse_lazy('users:logout')
 
 BASE_DIR = Path(__file__).ancestor(3)
-
-SECRET_KEY = 'hc0zl8e2mw=8#4k_!ck51l!a*)he$r0!4bt@7m)&9yh%frynsq'
 
 DEBUG = True
 ALLOWED_HOSTS = []
@@ -88,15 +86,14 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 # termina configuracion de restablecimiento de contraseña
 
-#social auth config
+"""social auth config"""
 AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookAppOAuth2',
     'social.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 
 )
-#social auth config
+"""social auth config"""
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = reverse_lazy('users:home')
 SOCIAL_AUTH_FACEBOOK_KEY = '1397750853857809'
 SOCIAL_AUTH_FACEBOOK_SECRET = '44b7a11e02a313488f8d1c6a13c32b47'
-
