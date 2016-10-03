@@ -7,3 +7,5 @@ __pycache__
 ahorrapp/.idea/*
 
 ahorrapp/static/bower_components/*
+
+ahorrapp/ahorrapp/manage.py

@@ -5,6 +5,7 @@
     <title>Login</title>
 </head>
 <body>
+    <a href="{% url 'landing' %}">inicio</a>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

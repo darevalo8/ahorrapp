@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Registro de Usuarios</h1>
-    <a href="{% url 'users:home' %}">Home</a>
+    <a href="{% url 'landing' %}">Home</a>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

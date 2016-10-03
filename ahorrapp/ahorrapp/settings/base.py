@@ -7,9 +7,6 @@ LOGOUT_URL = reverse_lazy('users:logout')
 
 BASE_DIR = Path(__file__).ancestor(3)
 
-DEBUG = True
-ALLOWED_HOSTS = []
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

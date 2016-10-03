@@ -3,7 +3,7 @@ from django.contrib.auth import views
 from .views import (index, UserProfileCreateView)
 
 urlpatterns = [
-    url(r'^$', index, name='home'),
+    # url(r'^$', index, name='home'),
     url(r'^register$', UserProfileCreateView.as_view(), name='register_user'),
     url(r'^login$', views.login, name='login'),
     url(r'^logout$', views.logout, {'next_page': 'users:home'}, name='logout'),
