@@ -1,16 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
-<body>
-    <a href="{% url 'landing' %}">inicio</a>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button>Login</button>
-    </form>
-    <a href="{% url 'users:recordar_contraseña' %}">olvide contraseña</a>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}ahorraapp-Inicia sesión{% endblock title %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'bower_components/materialize/dist/css/materialize.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock styles %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="h col s12 m3 l3"></div>
+            <div class="h col s12 m6 l5">
+                <br><br><br>
+                <ul class="tabs">
+                    <li class="tab col s3" ><a href="{% url 'users:register_user' %}" id="registro" target="_self">Registro</a></li>
+                    <li class="tab col s3"><a class="active" href="{% url 'users:login' %}" target="_self">Iniciar sesión <i class="tiny material-icons">keyboard_arrow_left</i></a></li>
+                </ul><br>
+
+                    <p id="text">Inicia sesión con tus redes sociales o con tu usuario y contraseña. </p>
+                <br>
+                <a class="waves-effect waves-light btn-large" id="facebook" href="{% url 'social:begin' 'facebook' %}">
+                    <img src="{% static 'images/facebook.svg' %}" class="icon icon-facebook" alt="">
+                </a>
+                <a class="waves-effect waves-light btn-large" id="twitter" href="{% url 'social:begin' 'twitter' %}">
+                    <img src="{% static 'images/twitter.svg' %}" class="icon icon-twitter" alt="">
+                </a>
+                <a class="waves-effect waves-light btn-large" id="google" href="{% url 'social:begin' 'google-oauth2' %}">
+                    <img src="{% static 'images/google-plus.svg' %}" class="icon icon-google-plus"  alt="">
+                </a>
+                <br>
+                <div class="row">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="input-field col s12">
+                            {{ form.username }}
+                            <label for="username">Nombre de usuario</label>
+                        </div>
+                        <div class="input-field col s12">
+                            {{ form.password }}
+                            <label for="password">Contraseña</label>
+                            <button class="waves-effect waves-light btn h">Iniciar sesión</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="h col s12 m3 l3"></div>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bower_components/materialize/dist/js/materialize.min.js' %}"></script>
+{% endblock js %}

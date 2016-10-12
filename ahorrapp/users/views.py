@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.views.generic import CreateView
+from django.http import HttpResponse
 from .models import UserProfile
 from .forms import UserForm
 
 
-def index(request):
-    return render(request, "users/index.html", {})
+def dashboard(request):
+    return render(request, 'users/dashboard.html', {})
 
 
 class UserProfileCreateView(CreateView):

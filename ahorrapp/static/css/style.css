@@ -1,0 +1,73 @@
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+
+}
+
+/* ==========================================
+Single-colored icons can be modified like so:
+.icon-name {
+  font-size: 32px;
+  color: red;
+}
+========================================== */
+/*==========================================
+configuracion de los botones sociales
+==========================================*/
+.tabs .tab a{
+	color: black;
+}
+.tabs .tab a:hover{
+	color: black;
+}
+#registro, #sesion{
+	color: grey;
+}
+#registro:hover, #sesion:hover{
+	color: black;
+}
+
+a {
+	background-color: #f1f8e9;
+}
+.tabs .indicator{
+	background-color: #f1f8e9
+}
+.btn-large {
+    height: 46px;
+    line-height: 50px;
+    margin: 8px;
+    width: calc(32.333% - 16px);
+}
+.icon-facebook, .icon-twitter, .icon-google-plus{
+	color: white;
+	font-size: 1.4em
+}
+#facebook{
+	background-color: #3B5998;
+}
+#twitter{
+	background-color: #4099FF;
+	border: 1px solid #8accf4;
+}
+
+#google{
+	background-color: #D34836;
+}
+
+.h{
+	width: 100%;
+}
+body{
+	background-color: #f1f8e9;
+}
+#text{
+	text-align: center;
+}
+#renovar{
+	margin-top: 10px;
+}

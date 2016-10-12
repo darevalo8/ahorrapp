@@ -1,12 +1,12 @@
 from django.conf.urls import url
 from django.contrib.auth import views
-from .views import (index, UserProfileCreateView)
+from .views import (dashboard, UserProfileCreateView)
 
 urlpatterns = [
-    # url(r'^$', index, name='home'),
+    url(r'^dashboard$', dashboard, name='dashboard'),
     url(r'^register$', UserProfileCreateView.as_view(), name='register_user'),
     url(r'^login$', views.login, name='login'),
-    url(r'^logout$', views.logout, {'next_page': 'users:home'}, name='logout'),
+    url(r'^logout$', views.logout, {'next_page': 'landing'}, name='logout'),
     url(
         r'^password-change/$',
         views.password_change,

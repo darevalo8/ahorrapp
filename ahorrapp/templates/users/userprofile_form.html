@@ -1,16 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <h1>Registro de Usuarios</h1>
-    <a href="{% url 'landing' %}">Home</a>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button>Guardar</button>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}ahorraapp-Inicia sesión{% endblock title %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'bower_components/materialize/dist/css/materialize.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock styles %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="h col s12 m3 l3"></div>
+            <div class="h col s12 m6 l5">
+                <br><br><br>
+                <ul class="tabs">
+                    <li class="tab col s3" ><a href="{% url 'users:register_user' %}" class="active">Registro <i class="tiny material-icons">keyboard_arrow_left</i></a></li>
+                    <li class="tab col s3"><a  href="{% url 'users:login' %}" id="sesion" target="_self">Iniciar sesión</a></li>
+                </ul><br>
+                <p>Registrate  con tus redes sociales o con tu usuario, correo y contraseña. </p>
+                <br>
+                <a class="waves-effect waves-light btn-large" id="facebook">
+                    <img src="{% static 'images/facebook.svg' %}" class="icon icon-facebook" alt="">
+                </a>
+                <a class="waves-effect waves-light btn-large" id="twitter">
+                    <img src="{% static 'images/twitter.svg' %}" class="icon icon-twitter" alt="">
+                </a>
+                <a class="waves-effect waves-light btn-large" id="google">
+                    <img src="{% static 'images/google-plus.svg' %}" class="icon icon-google-plus" alt="">
+                </a>
+                <br>
+                <div class="row">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="input-field col s12">
+                            {{ form.username }}
+                            <label for="username">Nombre de usuario</label>
+                        </div>
+                        <div class="input-field col s12">
+                            {{ form.email }}
+                            <label for="email">Correoelectronico</label>
+                        </div>
+                        <div class="input-field col s12">
+                            {{ form.password }}
+                            <label for="password">Contraseña</label>
+                            <button class="waves-effect waves-light btn h">Registrarse</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="h col s12 m3 l3"></div>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bower_components/materialize/dist/js/materialize.min.js' %}"></script>
+{% endblock js %}
