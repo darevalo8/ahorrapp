@@ -9,3 +9,5 @@ ahorrapp/.idea/*
 ahorrapp/static/bower_components/*
 
 ahorrapp/ahorrapp/manage.py
+
+ahorrapp/ahorrapp/users/migrations/*

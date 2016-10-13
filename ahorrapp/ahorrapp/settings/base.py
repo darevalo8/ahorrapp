@@ -5,6 +5,7 @@ LOGIN_URL = reverse_lazy('users:login')
 LOGIN_REDIRECT_URL = reverse_lazy('users:dashboard')
 LOGOUT_URL = reverse_lazy('landing')
 SOCIAL_AUTH_USER_MODEL = 'users.UserProfile'
+
 BASE_DIR = Path(__file__).ancestor(3)
 
 MIDDLEWARE_CLASSES = (
@@ -94,10 +95,13 @@ AUTHENTICATION_BACKENDS = (
 )
 """social auth config"""
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = reverse_lazy('users:dashboard')
+
 SOCIAL_AUTH_FACEBOOK_KEY = '1397750853857809'
 SOCIAL_AUTH_FACEBOOK_SECRET = '44b7a11e02a313488f8d1c6a13c32b47'
+
 SOCIAL_AUTH_TWITTER_KEY = '3pgM4xrYXTJ27RUgwkhGMGMdj'
 SOCIAL_AUTH_TWITTER_SECRET = '1QBTfFWBHcaHx4ZKwUcXjhjL0BGqy3MUsgxyjqN6jAHz4RMDHN'
+
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '98700320047-5kllpcs1r21bt7vr4qnhatliamghkdls.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'Jg2xZ57_8a6-6W_9uEDW8WBH'
 
@@ -106,7 +110,10 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_uid',
     'social.pipeline.social_auth.auth_allowed',
     'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
-    'social.pipeline.user.user_details',
+    # 'social.pipeline.user.user_details',
+    'users.pipelines.user_details',
 )

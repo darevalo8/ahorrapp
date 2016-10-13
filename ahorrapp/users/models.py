@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 
 
 class UserProfile(User):
-    avatar = models.URLField(default='')
+    avatar = models.URLField(default='https://url.com',blank=True)
     def get_absolute_url(self):
         return reverse('users:home')
 
