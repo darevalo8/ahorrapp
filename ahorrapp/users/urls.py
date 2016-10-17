@@ -1,36 +1,39 @@
 from django.conf.urls import url
-from django.contrib.auth import views
-from .views import (dashboard, UserProfileCreateView)
+from django.core.urlresolvers import reverse_lazy
+from django.contrib.auth import views as auth_views
+from .views import (dashboard, UserProfileDetailView, UserProfileUpdate)
 
 urlpatterns = [
     url(r'^dashboard$', dashboard, name='dashboard'),
-    url(r'^register$', UserProfileCreateView.as_view(), name='register_user'),
-    url(r'^login$', views.login, name='login'),
-    url(r'^logout$', views.logout, {'next_page': 'landing'}, name='logout'),
+    # url(r'^register$', UserProfileCreateView.as_view(), name='register_user'),
+    # url(r'^login$', auth_views.login,
+    #     {'template_name': 'registration/login.html'},
+    #     name='login'),
+    url(r'^logout$', auth_views.logout,
+        {'template_name': 'registration/logout.html'},
+        name='logout'),
     url(
-        r'^password-change/$',
-        views.password_change,
+        r'^password/change/$',
+        auth_views.password_change,
         {
-            'post_change_redirect': 'users:password_change_done'
+            'post_change_redirect': reverse_lazy('auth_password_change_done')
         },
-        name='password_change'
+        name='auth_password_change'
     ),
-    url(r'^password-change-done/', views.password_change_done, name='password_change_done'),
-    url(
-        r'^password-reset$',
-        views.password_reset,
-        {
-            'post_reset_redirect': 'users:reset_done',
-            # 'from_email': 'danielfelipe.arevalo2@gmail.com'
-        },
-        name='recordar_contraseña'),
-    url(r'^password-reset-done$', views.password_reset_done, name='reset_done'),
-    url(
-        r'^password-reset-confirm/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        views.password_reset_confirm,
-        {
-            'post_reset_redirect': 'users:reset_complete'
-        },
-        name='reset_confirm'),
-    url(r'^password-reset-complete$', views.password_reset_complete, name='reset_complete'),
+    url(r'^password/change/done/$',
+        auth_views.password_change_done,
+        name='auth_password_change_done'),
+    url(r'^password/reset/$',
+        auth_views.password_reset,
+        {'post_reset_redirect': reverse_lazy('auth_password_reset_done')},
+        name='auth_password_reset'),
+    url(r'^password/reset/complete/$',
+        auth_views.password_reset_complete,
+        name='auth_password_reset_complete'),
+    url(r'^password/reset/done/$',
+        auth_views.password_reset_done,
+        name='auth_password_reset_done'),
+
+    url(r'^detail/(?P<slug>[-\w]+)/$', UserProfileDetailView.as_view(), name='user_detail'),
+    url(r'^update/(?P<slug>[-\w]+)/$', UserProfileUpdate.as_view(), name='update_user')
 ]

@@ -16,13 +16,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserProfile',
             fields=[
-                ('user_ptr', models.OneToOneField(parent_link=True, to=settings.AUTH_USER_MODEL, primary_key=True, auto_created=True, serialize=False)),
+                ('user_ptr', models.OneToOneField(to=settings.AUTH_USER_MODEL, serialize=False, auto_created=True, primary_key=True, parent_link=True)),
+                ('avatar', models.URLField(blank=True, default='')),
+                ('slug', models.SlugField()),
             ],
-            options={
-                'verbose_name': 'user',
-                'verbose_name_plural': 'users',
-                'abstract': False,
-            },
             bases=('auth.user',),
             managers=[
                 ('objects', django.contrib.auth.models.UserManager()),

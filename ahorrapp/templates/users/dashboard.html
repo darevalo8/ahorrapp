@@ -5,16 +5,25 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <style>
+        #avatar{
+            width:64px;
+			height:64px;
+			border-radius:150px;
+        }
+    </style>
 </head>
 <body>
     {% if user.is_authenticated %}
-        <h1>Hola {{ user.get_full_name }}</h1>
+        <h1>Hola {{ user.username }}</h1>
         <a href="{% url 'users:logout' %}">cerrar sesion</a>
-        <a href="{% url 'users:password_change' %}">cambiar contraseña</a>
+        <a href="{% url 'auth_password_change' %}">cambiar contraseña</a>
+        <a href="{% url 'users:user_detail' user.userprofile.slug %}">Perfil</a>
+        <p><img src="{{ user.avatar }}" alt="" id="avatar"></p>
     {% else %}
         <h1>Hola</h1>
-        <a href="{% url 'users:login' %}">login</a>
-        <a href="{% url 'users:register_user' %}">Registro de usuario</a>
+        <a href="{% url 'auth_login' %}">login</a>
+        <a href="{% url 'registration_register' %}">Registro de usuario</a>
         <h4>Accede con tus redes sociales</h4>
         <ul>
             <li><a href="{% url 'social:begin' 'facebook' %}">Facebook</a></li>

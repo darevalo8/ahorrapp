@@ -8,6 +8,10 @@ ahorrapp/.idea/*
 
 ahorrapp/static/bower_components/*
 
-ahorrapp/ahorrapp/manage.py
+ahorrapp/manage.py
 
-ahorrapp/ahorrapp/users/migrations/*
+ahorrapp/ahorrapp/settings/local.py
+
+
+
+ahorrapp/users/migrations/__pycache__

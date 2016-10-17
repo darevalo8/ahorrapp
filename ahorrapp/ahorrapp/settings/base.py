@@ -1,11 +1,10 @@
 from django.core.urlresolvers import reverse_lazy
 from unipath import Path
-
-LOGIN_URL = reverse_lazy('users:login')
+LOGIN_URL = reverse_lazy('auth_login')
 LOGIN_REDIRECT_URL = reverse_lazy('users:dashboard')
 LOGOUT_URL = reverse_lazy('landing')
+# python social auth
 SOCIAL_AUTH_USER_MODEL = 'users.UserProfile'
-
 BASE_DIR = Path(__file__).ancestor(3)
 
 MIDDLEWARE_CLASSES = (
@@ -32,6 +31,7 @@ DJANGO_APPS = (
 
 THIRD_PARTY_APPS = (
     'social.apps.django_app.default',
+    'registration',
 )
 
 LOCAL_APPS = (
@@ -80,8 +80,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'danielfelipe.arevalo2@gmail.com'
 EMAIL_HOST_PASSWORD = 'Jose-9508'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-SERVER_EMAIL = EMAIL_HOST_USER
 # termina configuracion de restablecimiento de contraseña
 
 """social auth config"""
@@ -98,6 +96,10 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL = reverse_lazy('users:dashboard')
 
 SOCIAL_AUTH_FACEBOOK_KEY = '1397750853857809'
 SOCIAL_AUTH_FACEBOOK_SECRET = '44b7a11e02a313488f8d1c6a13c32b47'
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id,name,email',
+}
 
 SOCIAL_AUTH_TWITTER_KEY = '3pgM4xrYXTJ27RUgwkhGMGMdj'
 SOCIAL_AUTH_TWITTER_SECRET = '1QBTfFWBHcaHx4ZKwUcXjhjL0BGqy3MUsgxyjqN6jAHz4RMDHN'
@@ -111,9 +113,16 @@ SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.auth_allowed',
     'social.pipeline.social_auth.social_user',
     'social.pipeline.user.get_username',
+    # 'social.pipeline.mail.mail_validation',
+    # 'social.pipeline.social_auth.associate_by_email',
     'social.pipeline.user.create_user',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
     # 'social.pipeline.user.user_details',
     'users.pipelines.user_details',
+    'users.pipelines.get_avatar',
 )
+
+# redux
+ACCOUNT_ACTIVATION_DAYS = 3
+REGISTRATION_FORM = 'users.forms.UserProfileForm'

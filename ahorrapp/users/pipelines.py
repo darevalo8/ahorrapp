@@ -1,4 +1,18 @@
-def user_details(strategy, details, user=None, *args, **kwargs):
+def get_avatar(backend, response, strategy, details, user=None, *args, **kwargs):
+    url = None
+    if backend.name == 'facebook':
+        url = 'https://graph.facebook.com/{0}/picture?type=large'.format(response['id'])
+    elif backend.name == 'google-oauth2':
+        link = response['image'].get('url')
+        url = link.replace('?sz=50', '')
+    elif backend.name == 'twitter':
+        url = response.get('profile_image_url', '').replace('_normal', '')
+    if url:
+        user.avatar = url
+        user.save()
+
+
+def user_details(backend, response, strategy, details, user=None, *args, **kwargs):
     """Update user details using data from provider."""
     if user and kwargs['is_new']:
 
