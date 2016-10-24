@@ -11,7 +11,8 @@ class UserProfile(User):
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         self.slug = slugify(self.username)
-        super(UserProfile, self).save(force_insert, force_update, using, update_fields)
+        super(UserProfile, self).save(force_insert, force_update, using,
+                                      update_fields)
 
     @property
     def get_absolute_url(self):

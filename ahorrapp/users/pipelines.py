@@ -1,9 +1,20 @@
-def get_avatar(backend, response, strategy, details, user=None, *args, **kwargs):
+def get_avatar(backend, response, strategy,
+               details, user=None, *args, **kwargs):
+    """
+    get_avatar este es una funcion o pipeline,
+    la cual su objetivo es obtener la foto de
+    perfil del usuario logueado por las trees
+    redes sociales usadas en este proyecto.
+    los parametros que usamos van ligados
+     a la libreria python social auth
+    para mas informacion consular en su documentacion.
+    """
     url = None
     if backend.name == 'facebook':
-        url = 'https://graph.facebook.com/{0}/picture?type=large'.format(response['id'])
+        url = 'https://graph.facebook.com/{0}/picture?type=large'.format(
+            response['id'])
     elif backend.name == 'google-oauth2':
-        link = response['image'].get('url')
+        link = response['image'].get('url',)
         url = link.replace('?sz=50', '')
     elif backend.name == 'twitter':
         url = response.get('profile_image_url', '').replace('_normal', '')
@@ -12,7 +23,8 @@ def get_avatar(backend, response, strategy, details, user=None, *args, **kwargs)
         user.save()
 
 
-def user_details(backend, response, strategy, details, user=None, *args, **kwargs):
+def user_details(backend, response, strategy,
+                 details, user=None, *args, **kwargs):
     """Update user details using data from provider."""
     if user and kwargs['is_new']:
 

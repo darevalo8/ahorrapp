@@ -49,13 +49,16 @@ class UserProfileForm(forms.ModelForm):
         site.
 
         """
-        if UserProfile.objects.filter(email__iexact=self.cleaned_data['email']):
+        if UserProfile.objects.filter(
+                email__iexact=self.cleaned_data['email']):
             raise forms.ValidationError(
-                _("This email address is already in use. Please supply a different email address."))
+                _("This email address is already in use. "
+                  " Please supply a different email address."))
         return self.cleaned_data['email']
 
     def save(self, commit=True):
-        """editamos este metodo para que cuando vaya a guardar un usuario encripte la contraseña"""
+        """editamos este metodo para que cuando vaya a guardar
+        un usuario encripte la contraseña"""
         user = super(UserProfileForm, self).save(commit=False)
         user.set_password(self.cleaned_data['password'])
         if commit:

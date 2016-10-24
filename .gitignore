@@ -15,3 +15,5 @@ ahorrapp/ahorrapp/settings/local.py
 
 
 ahorrapp/users/migrations/__pycache__
+ahorrapp/incomes/migrations/__pycache__
+ahorrapp/incomes/migrations/000

@@ -5,7 +5,8 @@ from .views import (dashboard, UserProfileDetailView, UserProfileUpdate)
 
 urlpatterns = [
     url(r'^dashboard$', dashboard, name='dashboard'),
-    # url(r'^register$', UserProfileCreateView.as_view(), name='register_user'),
+    # url(r'^register$', UserProfileCreateView.as_view(),
+    #  name='register_user'),
     # url(r'^login$', auth_views.login,
     #     {'template_name': 'registration/login.html'},
     #     name='login'),
@@ -33,7 +34,8 @@ urlpatterns = [
     url(r'^password/reset/done/$',
         auth_views.password_reset_done,
         name='auth_password_reset_done'),
-
-    url(r'^detail/(?P<slug>[-\w]+)/$', UserProfileDetailView.as_view(), name='user_detail'),
-    url(r'^update/(?P<slug>[-\w]+)/$', UserProfileUpdate.as_view(), name='update_user')
+    url(r'^detail/(?P<slug>[-\w]+)/$', UserProfileDetailView.as_view(),
+        name='user_detail'),
+    url(r'^update/(?P<slug>[-\w]+)/$', UserProfileUpdate.as_view(),
+        name='update_user')
 ]
