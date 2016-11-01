@@ -20,6 +20,9 @@
         <a href="{% url 'auth_password_change' %}">cambiar contraseña</a>
         <a href="{% url 'users:user_detail' user.userprofile.slug %}">Perfil</a>
         <p><img src="{{ user.avatar }}" alt="" id="avatar"></p>
+        <a href="{% url 'incomes:list_account' %}">Cuentas</a>
+        <a href="{% url 'incomes:create_income' %}">Ingresos</a>
+        <a href="{% url 'incomes:create_type' %}">tipos de Ingresos</a>
     {% else %}
         <h1>Hola</h1>
         <a href="{% url 'auth_login' %}">login</a>

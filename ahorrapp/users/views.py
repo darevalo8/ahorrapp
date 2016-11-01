@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse_lazy
 from django.views.generic import DetailView, UpdateView
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from .models import UserProfile
 from .viewmixins import LoginRequiredMixin
 
@@ -29,3 +30,15 @@ class UserProfileUpdate(LoginRequiredMixin, UpdateView):
             return super(UserProfileUpdate, self).form_valid(form)
         else:
             raise PermissionDenied
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # validamos si el usuario que va actualizar
+        # es el dueño de la cuenta si no lo es
+        # mandamos un Httpe404
+        if self.object.id == request.user.userprofile.id:
+            form = self.get_form()
+        else:
+            raise Http404
+
+        return self.render_to_response(self.get_context_data(form=form))

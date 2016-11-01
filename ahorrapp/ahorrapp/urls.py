@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'^auth/', include('social.apps.django_app.urls', namespace='social')),
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^dashboard/', include('incomes.urls', namespace='incomes')),
-    url(r'^', landing, name='landing'),
+    url(r'^$', landing, name='landing'),
 
 ]
