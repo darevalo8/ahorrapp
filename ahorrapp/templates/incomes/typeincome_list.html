@@ -7,7 +7,11 @@
 <body>
     <h4>{{ menssage }}</h4>
     {% for type_income in type_incomes %}
-        <p>{{ type_income.tipo }}</p>
+        <p>
+            {{ type_income.tipo }}
+            <a href="{% url 'incomes:update_type' type_income.id %}">actualizar</a>
+            <a href="{% url 'incomes:delete_type' type_income.id %}">Eliminar</a>
+        </p>
     {% endfor %}
 
 </body>

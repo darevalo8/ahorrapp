@@ -4,12 +4,15 @@ from django.http import HttpResponseRedirect, Http404
 from django.core.exceptions import PermissionDenied
 from django.views.generic import (View,
                                   CreateView,
-                                  UpdateView, DeleteView)
-from .models import (Account, TypeIncome)
+                                  UpdateView,
+                                  DeleteView)
+from users.viewmixins import LoginRequiredMixin
+from .models import (Account, TypeIncome, Income)
 from .forms import IcomeForm
+from .helpers import BaseListView
 
 
-class AccountCreateView(CreateView):
+class AccountCreateView(LoginRequiredMixin, CreateView):
     model = Account
     fields = ['name_account', 'saldo_actual']
     success_url = reverse_lazy('incomes:list_account')
@@ -21,7 +24,7 @@ class AccountCreateView(CreateView):
         return super(AccountCreateView, self).form_valid(form)
 
 
-class AccountUpdateView(UpdateView):
+class AccountUpdateView(LoginRequiredMixin, UpdateView):
     model = Account
     fields = ['name_account', 'saldo_actual']
     success_url = reverse_lazy('incomes:list_account')
@@ -49,10 +52,18 @@ class AccountUpdateView(UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class AccountDeleteView(DeleteView):
+class AccountDeleteView(LoginRequiredMixin, DeleteView):
     model = Account
     success_url = reverse_lazy('incomes:list_account')
     template_name = 'incomes/account_delete.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.user_profile_id == request.user.userprofile.id:
+            context = self.get_context_data(object=self.object)
+            return self.render_to_response(context)
+        else:
+            raise Http404
 
     def delete(self, request, *args, **kwargs):
 
@@ -66,16 +77,17 @@ class AccountDeleteView(DeleteView):
         return HttpResponseRedirect(success_url)
 
 
-class AccountListView(View):
+class AccountListView(LoginRequiredMixin, View):
     template_name = 'incomes/account_list.html'
 
     def get(self, request):
 
-        accounts = Account.objects.saldo_final(user_id=request.user.userprofile.id)
+        accounts = Account.objects.saldo_final(
+            user_id=request.user.userprofile.id)
         return render(request, self.template_name, {'accounts': accounts})
 
 
-class CreateIncome(View):
+class CreateIncome(LoginRequiredMixin, View):
     template_name = 'incomes/income_form.html'
 
     def get(self, request):
@@ -93,8 +105,41 @@ class CreateIncome(View):
             return redirect('incomes:list_account')
 
 
-class IncomeUpdateView(View):
-    pass
+class IncomeListView(LoginRequiredMixin, BaseListView):
+    moodel = Income
+    context_object_name = 'incomes'
+    template_name = 'incomes/income_list.html'
+
+
+class IncomeUpdateView(LoginRequiredMixin, View):
+    template_name = 'incomes/income_form.html'
+
+    def get(self, request, pk):
+        income_object = Income.objects.get(pk=pk)
+        if income_object.user_profile_id == request.user.userprofile.id:
+            form_class = IcomeForm(instance=income_object)
+            form_class.get_selects(request.user.userprofile.id)
+        else:
+            raise Http404
+        return render(request, self.template_name, {'form': form_class})
+
+    @staticmethod
+    def post(request, pk):
+        income_object = Income.objects.get(pk=pk)
+        form = IcomeForm(request.POST, instance=income_object)
+        if form.is_valid():
+            income_value = form.save(commit=False)
+            if income_value.user_profile_id == request.user.userprofile.id:
+                income_value.save()
+                return redirect('incomes:list_income')
+            else:
+                raise Http404
+
+
+class IncomeDeleteView(AccountDeleteView):
+    model = Income
+    template_name = 'incomes/income_delete.html'
+    success_url = reverse_lazy('incomes:list_income')
 
 
 class TypeIncomeCreateView(AccountCreateView):
@@ -103,14 +148,19 @@ class TypeIncomeCreateView(AccountCreateView):
     success_url = reverse_lazy('incomes:list_type')
 
 
-class TypeIncomeListView(View):
-    type_incomes = None
+class TypeIncomeListView(LoginRequiredMixin, BaseListView):
+    moodel = TypeIncome
+    template_name = 'incomes/typeincome_list.html'
+    context_object_name = 'type_incomes'
 
-    def get(self, request):
-        context = {'type_incomes': None, 'menssage': ''}
-        self.type_incomes = TypeIncome.objects.filter(user_profile=request.user.userprofile.id)
-        if self.type_incomes:
-            context['type_incomes'] = self.type_incomes
-        else:
-            context['menssage'] = 'No hay registros'
-        return render(request, 'incomes/typeincome_list.html', context)
+
+class TypeIncomeUpdateView(AccountUpdateView):
+    model = TypeIncome
+    fields = ['tipo']
+    success_url = reverse_lazy('incomes:list_type')
+
+
+class TypeIncomeDeleteView(AccountDeleteView):
+    model = TypeIncome
+    success_url = reverse_lazy('incomes:list_type')
+    template_name = 'incomes/typeincome_delete.html'

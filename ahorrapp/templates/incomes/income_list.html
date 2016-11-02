@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for income  in incomes %}
+        <u>
+            <li>
+                {{ income.nombre_ingreso }} <a href="{% url 'incomes:update_income' income.id %}">actualizar</a>
+                <a href="{% url 'incomes:delete_income' income.id %}">Eliminar</a>
+            </li>
+        </u>
+    {% endfor %}
+
+</body>
+</html>

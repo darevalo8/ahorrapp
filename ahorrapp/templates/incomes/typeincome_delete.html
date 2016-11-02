@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>incomes</title>
+    <title>delete</title>
 </head>
 <body>
+    <p>desea eliminar {{ object.tipo }}</p>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="enviar">
+        <input type="submit" value="eliminar">
     </form>
-    <a href="{% url 'incomes:list_type' %}">Lista</a>
 </body>
 </html>

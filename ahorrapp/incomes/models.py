@@ -48,6 +48,7 @@ class Account(TimeStampedModel):
 class TypeIncome(models.Model):
     tipo = models.CharField(max_length=50)
     user_profile = models.ForeignKey(UserProfile)
+
     def __str__(self):
         return self.tipo
 

@@ -6,11 +6,18 @@ from .models import (Income,
 
 
 class IcomeForm(forms.ModelForm):
-    # account = forms.ModelChoiceField(queryset=None)
+
     def get_selects(self, user_pro):
-        self.fields['account'].queryset = Account.objects.filter(user_profile=user_pro)
-        self.fields['type_income'].queryset = TypeIncome.objects.filter(user_profile=user_pro)
+        self.fields['account'].queryset = Account.objects.filter(
+            user_profile=user_pro)
+        self.fields['type_income'].queryset = TypeIncome.objects.filter(
+            user_profile=user_pro)
 
     class Meta:
         model = Income
-        fields = ('nombre_ingreso', 'valor_ingreso', 'account', 'description', 'type_income')
+        fields = (
+            'nombre_ingreso',
+            'valor_ingreso',
+            'account',
+            'description',
+            'type_income')
