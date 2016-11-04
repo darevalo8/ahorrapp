@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Type Expense</title>
+</head>
+<body>
+    {% if type_expenses %}
+        {% for type_expense in  type_expenses %}
+            <p>
+                {{ type_expense.type }} <a href="{% url 'expenses:update_typeexpense' type_expense.id %}">Editar</a>
+                <a href="{% url 'expenses:delete_typeexpense' type_expense.id %}">Eliminar</a>
+            </p>
+        {% endfor %}
+    {% else %}
+        <p>No hay registros</p>
+    {% endif %}
+    <a href="{% url 'expenses:create_typeexpense' %}">Crear</a>
+</body>
+</html>

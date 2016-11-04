@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>delete</title>
+</head>
+<body>
+    <p>desea eliminar {{ object.name_expense }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="eliminar">
+    </form>
+</body>
+</html>

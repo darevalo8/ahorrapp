@@ -1,24 +1,6 @@
 from django.db import models
 from users.models import UserProfile
-
-
-class SaldoFinalManager(models.Manager):
-    use_for_related_fields = True
-
-    def saldo_final(self, **kwargs):
-        consulta = "SELECT account.id,account.name_account,  " \
-                   "account.saldo_actual, " \
-                   "sum(income.valor_ingreso)+account.saldo_actual " \
-                   "as saldo_total, " \
-                   "account.created, account.user_profile_id " \
-                   "FROM incomes_income as income FULL " \
-                   "JOIN incomes_account as account " \
-                   "ON income.account_id = account.id " \
-                   "WHERE account.user_profile_id = {0} " \
-                   "GROUP BY account.saldo_actual, " \
-                   "account.name_account, account.id, account.created " \
-                   "ORDER BY account.name_account;"
-        return self.raw(consulta.format(kwargs['user_id']))
+from .managers import SaldoFinalManager
 
 
 class TimeStampedModel(models.Model):

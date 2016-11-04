@@ -1,80 +1,33 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect, Http404
+from django.http import Http404
 from django.core.exceptions import PermissionDenied
-from django.views.generic import (View,
-                                  CreateView,
-                                  UpdateView,
-                                  DeleteView)
+from django.views.generic import (View,)
 from users.viewmixins import LoginRequiredMixin
 from .models import (Account, TypeIncome, Income)
 from .forms import IcomeForm
-from .helpers import BaseListView
+from .helpers import (BaseListView,
+                      BaseCreateView,
+                      BaseUpdateView,
+                      BaseDeleteView)
 
 
-class AccountCreateView(LoginRequiredMixin, CreateView):
+class AccountCreateView(LoginRequiredMixin, BaseCreateView):
     model = Account
     fields = ['name_account', 'saldo_actual']
     success_url = reverse_lazy('incomes:list_account')
 
-    def form_valid(self, form):
-        form_value = form.save(commit=False)
-        form_value.user_profile_id = self.request.user.userprofile.id
-        form_value.save()
-        return super(AccountCreateView, self).form_valid(form)
 
-
-class AccountUpdateView(LoginRequiredMixin, UpdateView):
+class AccountUpdateView(LoginRequiredMixin, BaseUpdateView):
     model = Account
     fields = ['name_account', 'saldo_actual']
     success_url = reverse_lazy('incomes:list_account')
 
-    def form_valid(self, form):
-        form_value = form.save(commit=False)
-        # validamos que un usuario X no pueda actualizar una
-        # cuenta de un usuario Y
-        if self.request.user.userprofile.id == form_value.user_profile_id:
-            form_value.save()
-        else:
-            raise PermissionDenied
-        return super(AccountUpdateView, self).form_valid(form)
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        # validamos si el usuario que va actualizar
-        # es el dueño de la cuenta si no
-        # le mandamos none
-        if self.object.user_profile_id == request.user.userprofile.id:
-            form = self.get_form()
-        else:
-            raise Http404
-
-        return self.render_to_response(self.get_context_data(form=form))
-
-
-class AccountDeleteView(LoginRequiredMixin, DeleteView):
+class AccountDeleteView(LoginRequiredMixin, BaseDeleteView):
     model = Account
     success_url = reverse_lazy('incomes:list_account')
     template_name = 'incomes/account_delete.html'
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.user_profile_id == request.user.userprofile.id:
-            context = self.get_context_data(object=self.object)
-            return self.render_to_response(context)
-        else:
-            raise Http404
-
-    def delete(self, request, *args, **kwargs):
-
-        self.object = self.get_object()
-        success_url = self.get_success_url()
-
-        if self.object.user_profile_id == request.user.userprofile.id:
-            self.object.delete()
-        else:
-            raise PermissionDenied
-        return HttpResponseRedirect(success_url)
 
 
 class AccountListView(LoginRequiredMixin, View):
@@ -133,7 +86,7 @@ class IncomeUpdateView(LoginRequiredMixin, View):
                 income_value.save()
                 return redirect('incomes:list_income')
             else:
-                raise Http404
+                raise PermissionDenied
 
 
 class IncomeDeleteView(AccountDeleteView):

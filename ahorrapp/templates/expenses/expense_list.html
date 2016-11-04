@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense list</title>
+</head>
+<body>
+    {% if expenses %}
+        {% for expense in expenses %}
+            <p>
+                {{ expense.name_expense }}
+                <a href="{% url 'expenses:update_expense' expense.id %}">Editar</a>
+                <a href="{% url 'expenses:delete_expense' expense.id %}">Eliminar</a>
+            </p>
+        {% endfor %}
+    {% else %}
+        <p>No hay registro</p>
+    {% endif %}
+    <a href="{% url 'expenses:create_expense' %}">Crear</a>
+</body>
+</html>

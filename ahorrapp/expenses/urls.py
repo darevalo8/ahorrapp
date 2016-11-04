@@ -1,0 +1,32 @@
+from django.conf.urls import url
+from .views import (TypeExpenseListView,
+                    TypeExpenseCreateView,
+                    TypeExpenseUpdateView,
+                    TypeExpenseDeleteView,
+                    ExpenseCreateView,
+                    ExpenseListView,
+                    ExpenseUpdateView,
+                    ExpenseDeleteView)
+urlpatterns = [
+    url(r'^list/type-expense/$',
+        TypeExpenseListView.as_view(),
+        name='list_typeexpense'),
+    url(r'^create/type-expense$',
+        TypeExpenseCreateView.as_view(),
+        name='create_typeexpense'),
+    url(r'^update/type-expense/(?P<pk>\d+)/$',
+        TypeExpenseUpdateView.as_view(),
+        name='update_typeexpense'),
+    url(r'^delete/type-expense/(?P<pk>\d+)/$',
+        TypeExpenseDeleteView.as_view(),
+        name='delete_typeexpense'),
+    url(r'^create/$', ExpenseCreateView.as_view(), name='create_expense'),
+    url(r'^list/$', ExpenseListView.as_view(), name='list_expense'),
+    url(r'^update/(?P<pk>\d+)/$',
+        ExpenseUpdateView.as_view(),
+        name='update_expense'),
+    url(r'^delete/(?P<pk>\d+)/$',
+        ExpenseDeleteView.as_view(),
+        name='delete_expense'),
+
+]
