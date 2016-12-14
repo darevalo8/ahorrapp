@@ -1,10 +1,10 @@
 from django.conf.urls import url
 from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth import views as auth_views
-from .views import (dashboard, UserProfileDetailView, UserProfileUpdate)
+from .views import (UserProfileDetailView, UserProfileUpdate)
 
 urlpatterns = [
-    url(r'^dashboard$', dashboard, name='dashboard'),
+    # url(r'^dashboard$', dashboard, name='dashboard'),
     # url(r'^register$', UserProfileCreateView.as_view(),
     #  name='register_user'),
     # url(r'^login$', auth_views.login,

@@ -4,7 +4,7 @@ from django.views.generic import (View,
                                   UpdateView,
                                   DeleteView)
 from django.core.exceptions import PermissionDenied
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 
 
 class BaseListView(View):
@@ -83,12 +83,58 @@ class BaseDeleteView(DeleteView):
             raise Http404
 
     def delete(self, request, *args, **kwargs):
-
+        if self.request.is_ajax():
+            print("holaaaa")
         self.object = self.get_object()
         success_url = self.get_success_url()
-
         if self.object.user_profile_id == request.user.userprofile.id:
             self.object.delete()
         else:
             raise PermissionDenied
         return HttpResponseRedirect(success_url)
+
+
+class AjaxDeleteView(View):
+    model = None
+
+    def get(self, request, pk):
+        obj = self.model.objects.get(pk=pk)
+        if self.request.is_ajax():
+            print('account pk = {0}'.format(pk))
+            if obj.user_profile_id == request.user.userprofile.id:
+                obj.delete()
+                return HttpResponse('Eliminado')
+            else:
+                raise Http404
+        else:
+            raise Http404
+
+# class CreateIncome(View):
+#     """
+#     el que vaya a  usar este helper, se tiene que crear
+#     el metodo get_selects en su form class
+#     """
+#
+#     template_name = ''
+#     form_class = None
+#     succes_url = None
+#
+#     def get(self, request):
+#         form_instance = self.form_class()
+#         form_instance.get_selects(request.user.userprofile.id)
+#         return render(request, self.template_name, {'form': form_instance})
+#
+#     def post(self, request):
+#         form_instance = self.form_class()
+#         if form_instance.is_valid():
+#             income = form_instance.save(commit=False)
+#             income.user_profile_id = request.user.userprofile.id
+#             income.save()
+#             return redirect('expenses:list_expense')
+#
+#     def get_succes_url(self):
+#         url = ''
+#         if self.succes_url:
+#             url = force_text(self.succes_url)
+#             print(url)
+#         return url

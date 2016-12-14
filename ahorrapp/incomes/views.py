@@ -9,25 +9,23 @@ from .forms import IcomeForm
 from .helpers import (BaseListView,
                       BaseCreateView,
                       BaseUpdateView,
-                      BaseDeleteView)
+                      AjaxDeleteView)
 
 
 class AccountCreateView(LoginRequiredMixin, BaseCreateView):
     model = Account
-    fields = ['name_account', 'saldo_actual']
+    fields = ['name_account', 'saldo_actual', 'account_type']
     success_url = reverse_lazy('incomes:list_account')
 
 
 class AccountUpdateView(LoginRequiredMixin, BaseUpdateView):
     model = Account
-    fields = ['name_account', 'saldo_actual']
+    fields = ['name_account', 'saldo_actual', 'account_type']
     success_url = reverse_lazy('incomes:list_account')
 
 
-class AccountDeleteView(LoginRequiredMixin, BaseDeleteView):
+class AccountDeleteView(LoginRequiredMixin, AjaxDeleteView):
     model = Account
-    success_url = reverse_lazy('incomes:list_account')
-    template_name = 'incomes/account_delete.html'
 
 
 class AccountListView(LoginRequiredMixin, View):
@@ -55,7 +53,7 @@ class CreateIncome(LoginRequiredMixin, View):
             income = form_class.save(commit=False)
             income.user_profile_id = request.user.userprofile.id
             income.save()
-            return redirect('incomes:list_account')
+            return redirect('incomes:list_income')
 
 
 class IncomeListView(LoginRequiredMixin, BaseListView):
@@ -91,8 +89,6 @@ class IncomeUpdateView(LoginRequiredMixin, View):
 
 class IncomeDeleteView(AccountDeleteView):
     model = Income
-    template_name = 'incomes/income_delete.html'
-    success_url = reverse_lazy('incomes:list_income')
 
 
 class TypeIncomeCreateView(AccountCreateView):
@@ -115,5 +111,10 @@ class TypeIncomeUpdateView(AccountUpdateView):
 
 class TypeIncomeDeleteView(AccountDeleteView):
     model = TypeIncome
-    success_url = reverse_lazy('incomes:list_type')
-    template_name = 'incomes/typeincome_delete.html'
+
+
+# class Delete1(LoginRequiredMixin, AjaxDeleteView):
+#     model = Account
+# def delete(request, pk):
+#     if request.is_ajax():
+#         print('holaaaa {0}'.format(pk))

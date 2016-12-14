@@ -1,17 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {% if form %}
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="guardar">
-        </form>
-    {% endif %}
+{% extends 'dashboard/base_dashboard.html' %}
+{% block title %}ahorra-app | Crear cuenta{% endblock title %}
+{% block content_main %}
+    <a href="{% url 'incomes:list_account' %}" class="top-nav full hide-on-large-only" id="retroceso"><i class="material-icons menu_icono">chevron_left</i></a>
+    <div class="container">
+        <h4>Crear Cuenta</h4>
+        <br>
+        <div class="row">
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-field col s12">
+                    {{ form.name_account }}
+                    <label for="name_account">Nombre de la cuenta</label>
+                </div>
 
-</body>
-</html>
+                <div class="input-field col s12">
+                    {{ form.saldo_actual }}
+                    <label for="saldo_actual">Saldo de la cuenta</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.account_type }}
+                    <label>Tipo de cuenta</label>
+                    <button class="waves-effect waves-light btn-large guardar" type="submit"><i class="material-icons">save</i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% block custom_js %}
+        <script type="text/javascript">
+            $('select').material_select();
+            $('#retroceso').show();
+            $('#menu').hide();
+{#            document.getElementById('retroceso').style.display = 'inherit';#}
+{#            document.getElementById('menu').style.display = 'none';#}
+        </script>
+    {% endblock custom_js %}
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load staticfiles %}
+{% block content_main %}
+    {% include 'dashboard/button_horizontal.html' %}
+    <div class="container">
+        <section>
+            <div class="row">
+                <div class="col s12 m12 l4">
+                    <p id="saludo">{{ user.username }} !</p>
+                </div>
+                <div class="col s12 m12 l8">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="{% static 'images/image1.jpg' %}">
+                            <span class="card-title texto">{{ frase.texto }} <i id="autor">{{ frase.autor }}</i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock content_main %}
+{% block custom_js %}
+    <script type="text/javascript" src="{% static 'bower_components/moment/moment.js' %}"></script>
+    <script type="text/javascript">
+        saludo();
+    </script>
+{% endblock custom_js %}

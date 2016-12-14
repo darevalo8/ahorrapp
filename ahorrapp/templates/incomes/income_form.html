@@ -1,15 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="guardar">
-    </form>
-    <a href="{% url 'incomes:list_income' %}">Lista ingresos</a>
-</body>
-</html>
+{% extends 'dashboard/base_dashboard.html' %}
+{% block title %}Crear ingreso | ahorra-app{% endblock title %}
+{% block content_main %}
+    <a href="{% url 'incomes:list_income' %}" class="top-nav full hide-on-large-only" id="retroceso"><i class="material-icons menu_icono">chevron_left</i></a>
+    <div class="container">
+        <h4>Crear ingreso</h4>
+        <br>
+        <div class="row">
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-field col s12">
+                    {{ form.nombre_ingreso }}
+                    <label for="nombre_ingreso">Nombre del ingreso</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.valor_ingreso }}
+                    <label for="valor_ingreso">Valor del ingreso</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.account }}
+                    <label>Cuenta</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.type_income }}
+                    <label>Tipo de ingreso</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.description }}
+                    <label for="description">Descripción</label>
+                    <button class="waves-effect waves-light btn-large guardar" type="submit"><i class="material-icons">save</i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% block custom_js %}
+        <script type="text/javascript">
+            $('select').material_select();
+            $('#retroceso').show();
+            $('#menu').hide();
+{#            document.getElementById('retroceso').style.display = 'inherit';#}
+{#            document.getElementById('menu').style.display = 'none';#}
+        </script>
+    {% endblock custom_js %}
+{% endblock %}

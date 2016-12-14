@@ -1,18 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {% for income  in incomes %}
-        <u>
-            <li>
-                {{ income.nombre_ingreso }} <a href="{% url 'incomes:update_income' income.id %}">actualizar</a>
-                <a href="{% url 'incomes:delete_income' income.id %}">Eliminar</a>
-            </li>
-        </u>
-    {% endfor %}
-
-</body>
-</html>
+{% extends 'dashboard/base_dashboard.html' %}
+{% load staticfiles %}
+{% load humanize %}
+{% block title %}Mis Ingresos|Ahorra-app{% endblock title %}
+{% block custom_style %}
+    <link rel="stylesheet" href="{% static 'bower_components/sweetalert/dist/sweetalert.css' %}">
+{% endblock custom_style %}
+{% block content_main %}
+    <ul class="tabs">
+        <li class="tab col s3"><a href="#" class="active">Mis ingresos</a></li>
+        <li class="tab col s3"><a href="{% url 'incomes:list_type' %}" target="_self">Tipos de ingreso</a></li>
+    </ul>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                {% for income in incomes %}
+                    <div id="{{ income.id }}">
+                        <ul class="collapsible" data-collapsible="accordion">
+                            <li>
+                                <div class="collapsible-header">
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                    {{ income.nombre_ingreso }}
+                                    <a href="#"><span><i class="material-icons right eliminar" id="{{ income.id }}">delete</i></span></a>
+                                    <a href="{% url 'incomes:update_income' income.id %}"><span><i class="material-icons right edit">mode_edit</i></span></a>
+                                </div>
+                                <div class="collapsible-body">
+                                    <p>Valor: {{ income.valor_ingreso|intcomma }}</p>
+                                    <p>Cuenta: {{ income.account }}</p>
+                                    <p>Tipo de ingreso: {{ income.type_income }}</p>
+                                    <p>Descripción: {{ income.description }}</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                {% empty %}
+                    <p>No hay ingresos</p>
+                    <p><b>NOTA:</b> Antes de crear un ingreso, primero debes de crear un tipo de ingreso :D</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large red" href="{% url 'incomes:create_income' %}"><i class="large material-icons">add</i></a>
+        </div>
+    </div>
+{% endblock content_main %}
+{% block custom_js %}
+    <script src="{% static 'bower_components/sweetalert/dist/sweetalert.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('ul.tabs').tabs();
+        });
+        $('.eliminar').click(function () {
+            var id = $(this).attr("id");
+            console.log(id);
+            swal({
+                        title: "Estas seguro?",
+                        text: "¿ Deseas eliminar este tipo de ingreso ?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Si, borrarla!",
+                        closeOnConfirm: false
+            },
+                    function(){
+                        var div_deleted = 'div#' + id;
+                        var url_id = '/cuentas/delete/ingreso/' + id;
+                        console.log(div_deleted);
+                        $.ajax({
+                            url: url_id,
+                            type: 'get',
+                            success: function (data) {
+                                console.log(data);
+                                $(div_deleted).hide();
+                                swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                            }
+                        });
+            });
+        });
+    </script>
+{% endblock custom_js %}

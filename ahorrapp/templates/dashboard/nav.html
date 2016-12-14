@@ -1,0 +1,72 @@
+{% load staticfiles %}
+<header>
+    <nav class="top-nav">
+        <div class="container">
+            <div class="nav-wrapper">
+                <!-- Dropdown Structure -->
+                <ul id="dropdown1" class="dropdown-content">
+                    <li><a href="#">Cambiar contraseña</a></li>
+                    <li class="divider"></li>
+                    <li><a href="{% url 'users:logout' %}">cerrar sesión</a></li>
+                </ul>
+                <a class="page-title">ahorra-app</a>
+                <ul class="right">
+                    <!-- Dropdown Trigger -->
+                    <li><a class="dropdown-button" id="opciones" href="#" data-activates="dropdown1"><i class="material-icons right">more_vert</i></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <a href="#" data-activates="slide-out" class="button-collapse top-nav full hide-on-large-only" id="menu"><i class="material-icons menu_icono">menu</i></a>
+    </div>
+    <ul id="slide-out" class="side-nav fixed menu-d">
+        <li>
+            <div class="userView">
+                <div class="background">
+                    <img src="{% static 'images/office.png' %}">
+                </div>
+                {% if user.avatar %}
+                    <a href="#"><img class="circle" src="{{ user.avatar }}"></a>
+                {% else %}
+                    <a href="#"><img class="circle" src=" {% static 'images/perfil.png' %}"></a>
+                {% endif %}
+                {% if user.first_name and user.email %}
+                    <a href="#"><span class="black-text name">{{ user.get_full_name }}</span></a>
+                    <a href="#"><span class="black-text email">{{ user.email }}</span></a>
+                {% else %}
+                    <a href="#"><span class="black-text name">{{ user.username }}</span></a>
+                {% endif %}
+
+            </div>
+        </li>
+        <li class="bold">
+            <a href="{% url 'dashboard:index' %}" class="waves-effect waves-teal"><i class="small material-icons" id="icono">home</i><span id="lista_menu">Inicio</span></a>
+        </li>
+        <li class="bold">
+            <a href="{% url 'incomes:list_account' %}" class="waves-effect waves-teal"><i class="small material-icons" id="icono">account_balance</i><span id="lista_menu">Cuentas</span></a>
+        </li>
+        <li class="bold">
+            <a href="{% url 'incomes:list_income' %}" class="waves-effect waves-teal"><i class="small material-icons" id="icono">account_balance_wallet</i><span id="lista_menu">Ingresos</span></a>
+        </li>
+        <li class="bold">
+            <a href="#!gastos" class="waves-effect waves-teal"><i class="small material-icons" id="icono">credit_card</i><span id="lista_menu">Gastos</span></a>
+        </li>
+        <li class="bold">
+            <a href="#obligaciones" class="waves-effect waves-teal"><i class="small material-icons" id="icono">local_atm</i><span id="lista_menu">Obligaciones</span></a>
+        </li>
+        <li class="bold">
+            <a href="#balance" class="waves-effect waves-teal"><i class="small material-icons" id="icono">trending_up</i><span id="lista_menu">Balance General</span></a>
+        </li>
+        <li class="bold">
+            <a href="#perfil" class="waves-effect waves-teal"><i class="small material-icons" id="icono">account_circle</i><span id="lista_menu">Perfil</span></a>
+        </li>
+        <li>
+            <div class="divider"></div>
+        </li>
+        <li class="bold">
+            <a href="#" class="waves-effect waves-teal"><i class="small material-icons" id="icono">announcement</i><span id="lista_menu">Enviar sugerencias</span></a>
+        </li>
+    </ul>
+</header>
+

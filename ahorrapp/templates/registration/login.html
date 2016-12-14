@@ -1,11 +1,9 @@
-{% extends 'base.html' %}
+{% extends 'base_materialize.html' %}
 {% load staticfiles %}
+{% block custom_style %}
+    <link rel="stylesheet" href="{% static 'css/autentication.css' %}">
+{% endblock custom_style %}
 {% block title %}ahorraapp-Inicia sesión{% endblock title %}
-{% block styles %}
-    <link rel="stylesheet" href="{% static 'bower_components/materialize/dist/css/materialize.min.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-{% endblock styles %}
 {% block content %}
     <div class="container">
         <div class="row">
@@ -50,7 +48,3 @@
         </div>
     </div>
 {% endblock content %}
-{% block js %}
-    <script type="text/javascript" src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bower_components/materialize/dist/js/materialize.min.js' %}"></script>
-{% endblock js %}

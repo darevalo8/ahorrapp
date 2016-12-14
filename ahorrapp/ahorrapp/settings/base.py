@@ -1,8 +1,8 @@
 from django.core.urlresolvers import reverse_lazy
 from unipath import Path
 LOGIN_URL = reverse_lazy('auth_login')
-LOGIN_REDIRECT_URL = reverse_lazy('users:dashboard')
-LOGOUT_URL = reverse_lazy('landing')
+LOGIN_REDIRECT_URL = reverse_lazy('dashboard:index')
+LOGOUT_URL = reverse_lazy('auth_login')
 # python social auth
 SOCIAL_AUTH_USER_MODEL = 'users.UserProfile'
 BASE_DIR = Path(__file__).ancestor(3)
@@ -27,6 +27,7 @@ DJANGO_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 )
 
 THIRD_PARTY_APPS = (
@@ -38,6 +39,8 @@ LOCAL_APPS = (
     'users',
     'incomes',
     'expenses',
+    'obligations',
+    'dashboard',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -94,7 +97,7 @@ AUTHENTICATION_BACKENDS = (
 
 )
 """social auth config"""
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = reverse_lazy('users:dashboard')
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = reverse_lazy('dashboard:index')
 
 SOCIAL_AUTH_FACEBOOK_KEY = '1397750853857809'
 SOCIAL_AUTH_FACEBOOK_SECRET = '44b7a11e02a313488f8d1c6a13c32b47'

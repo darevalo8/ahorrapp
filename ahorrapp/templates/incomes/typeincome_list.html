@@ -1,18 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>list income</title>
-</head>
-<body>
-    <h4>{{ menssage }}</h4>
-    {% for type_income in type_incomes %}
-        <p>
-            {{ type_income.tipo }}
-            <a href="{% url 'incomes:update_type' type_income.id %}">actualizar</a>
-            <a href="{% url 'incomes:delete_type' type_income.id %}">Eliminar</a>
-        </p>
-    {% endfor %}
-
-</body>
-</html>
+{% extends 'dashboard/base_dashboard.html' %}
+{% load staticfiles %}
+{% load humanize %}
+{% block title %}Tipo de ingreso|Ahorra-app{% endblock title %}
+{% block custom_style %}
+    <link rel="stylesheet" href="{% static 'bower_components/sweetalert/dist/sweetalert.css' %}">
+{% endblock custom_style %}
+{% block content_main %}
+    <ul class="tabs">
+        <li class="tab col s3"><a href="{% url 'incomes:list_income' %}" target="_self">Mis ingresos</a></li>
+        <li class="tab col s3"><a href="#" class="active">Tipos de ingreso</a></li>
+    </ul>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                {% for type_income in type_incomes %}
+                    <div id="{{ type_income.id }}">
+                        <ul class="collapsible" data-collapsible="accordion">
+                            <li>
+                                <div class="collapsible-header">
+                                    <i class="material-icons">label_outline</i>
+                                    {{ type_income.tipo }}
+                                    <a href="#"><span><i class="material-icons right eliminar" id="{{ type_income.id }}">delete</i></span></a>
+                                    <a href="{% url 'incomes:update_type' type_income.id %}"><span><i class="material-icons right edit">mode_edit</i></span></a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                {% empty %}
+                    <p>No hay tipos de ingresos</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large red" href="{% url 'incomes:create_type' %}"><i class="large material-icons">add</i></a>
+        </div>
+    </div>
+{% endblock content_main %}
+{% block custom_js %}
+    <script src="{% static 'bower_components/sweetalert/dist/sweetalert.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('ul.tabs').tabs();
+        });
+        $('.eliminar').click(function () {
+            var id = $(this).attr("id");
+            console.log(id);
+            swal({
+                        title: "Estas seguro?",
+                        text: "¿ Deseas eliminar este tipo de ingreso ?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Si, borrarla!",
+                        closeOnConfirm: false
+            },
+                    function(){
+                        var div_deleted = 'div#' + id;
+                        var url_id = '/cuentas/delete/type/' + id;
+                        console.log(div_deleted);
+                        $.ajax({
+                            url: url_id,
+                            type: 'get',
+                            success: function (data) {
+                                console.log(data);
+                                $(div_deleted).hide();
+                                swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                            }
+                        });
+            });
+        });
+    </script>
+{% endblock custom_js %}

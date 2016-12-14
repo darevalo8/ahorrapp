@@ -7,8 +7,8 @@ from .models import UserProfile
 from .viewmixins import LoginRequiredMixin
 
 
-def dashboard(request):
-    return render(request, 'users/dashboard.html', {})
+# def dashboard(request):
+#     return render(request, 'users/dashboard.html', {})
 
 
 class UserProfileDetailView(DetailView):

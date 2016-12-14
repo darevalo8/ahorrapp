@@ -1,0 +1,22 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for obligation in obligations %}
+        <p>
+            {{ obligation.name_obligation }}-{{ obligation.value_obligation|intcomma }}
+            <a href="{% url 'obligations:update_obligation' obligation.id %}">Actualizar</a>
+            <a href="{% url 'obligations:delete_obligation' obligation.id %}">Eliminar</a>
+        </p>
+    {% empty %}
+        <p>No hay obligaciones pendientes...</p>
+    {% endfor %}
+
+    <a href="{% url 'obligations:create_obligation' %}">Crear</a>
+
+</body>
+</html>

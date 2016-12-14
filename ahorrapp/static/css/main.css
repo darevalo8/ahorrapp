@@ -1,3 +1,136 @@
-body{
-    background-color: aqua;
+nav.top-nav {
+    height: 122px;
+    box-shadow: none;
+    background-color:  #db4437;
+}
+body, .menu-d{
+	/*esto es para ponerle fondo al menu y al body*/
+	background-color: #EFEFEF;
+}
+nav.top-nav a.page-title, .menu_icono {
+	/*el ancho del baner donde dice ahorrapp*/
+    line-height: 122px;
+    font-size: 3.1rem;
+}
+ header, main, footer {
+ 	padding-left: 300px;
+}
+@media only screen and (max-width : 600px){
+        i.eliminar{
+        margin-right: 40px;
+    }
+}
+@media only screen and (max-width : 992px) {
+    header, main, footer {
+      	padding-left: 0;
+    }
+    nav ul a{
+        padding: 0;
+    }
+
+    nav .nav-wrapper {
+        text-align: center;
+        padding-left: 23px;
+	}
+    i.menu_icono{
+        font-size: 2rem;
+        /*margin-right: 20px;*/
+    }
+    a.page-title{
+        padding-left: 15px;
+    }
+    a#opciones{
+        margin-right: 0;
+    }
+    button.guardar{
+        width: 100%;
+    }
+
+}
+
+
+a.button-collapse.top-nav.full {
+    line-height: 122px;
+}
+a.button-collapse.top-nav {
+    position: absolute;
+    text-align: center;
+    height: 48px;
+    width: 48px;
+    /*left: 7.5%; viejo*/
+    left: -1.5%;
+    top: 0;
+    float: none;
+    margin-left: 1.5rem;
+    color: #fff;
+    font-size: 36px;
+    z-index: 2;
+}
+/*estos son valores de los iconos del menu y la lista*/
+#icono{
+	padding-left: 25px;
+}
+#lista_menu{
+	padding-left: 9px;
+}
+.card .texto {
+    font-size: 16px;
+}
+
+#autor{
+	font-size: 10px;
+	opacity: 0.8;
+}
+#saludo{
+    font-size: 30px;
+}
+#opciones{
+    margin-top: 32px;
+    margin-right: -26px;
+}
+
+/*icono de las cards de cuenta*/
+
+div.card-action a i{
+	font-size: 32px;
+}
+
+#editar{
+	color: #2196f3 ;
+}
+.eliminar{
+	color: #F44336 ;
+}
+/*esta linea es para los colores del select*/
+/*.dropdown-content li>span{*/
+    /*color: black;*/
+/*}*/
+
+#retroceso{
+    display: none;
+    margin-top: 4px;
+    position: absolute;
+    text-align: center;
+    height: 48px;
+    width: 48px;
+    left: -1.5%;
+    top: 0;
+    float: none;
+    margin-left: 1.5rem;
+    color: #fff;
+    font-size: 47px;
+
+}
+#retroceso i{
+    font-size: 47px;
+}
+
+.tabs{
+    background-color: #db4437;
+}
+.tabs .tab a{
+    color: #fff;
+}
+.tabs .indicator{
+    background-color: #fff;
 }

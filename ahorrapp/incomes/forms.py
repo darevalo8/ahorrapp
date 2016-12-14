@@ -21,3 +21,6 @@ class IcomeForm(forms.ModelForm):
             'account',
             'description',
             'type_income')
+        widgets = {
+            'description': forms.Textarea(attrs={'class': 'materialize-textarea'}),
+        }
