@@ -3,7 +3,7 @@ from django.http import Http404
 from django.core.exceptions import PermissionDenied
 from django.views.generic import View
 from django.core.urlresolvers import reverse_lazy
-from incomes.helpers import BaseListView, BaseDeleteView
+from incomes.helpers import BaseListView, AjaxDeleteView
 from .forms import ObligationForm
 from .models import Obligation
 from users.viewmixins import LoginRequiredMixin
@@ -34,12 +34,12 @@ class ObligationListView(BaseListView):
 
 
 class ObligationUpdateView(View):
-    template_name = 'incomes/income_form.html'
+    template_name = 'obligations/obligation_form.html'
 
     def get(self, request, pk):
-        income_object = Obligation.objects.get(pk=pk)
-        if income_object.user_profile_id == request.user.userprofile.id:
-            form_class = ObligationForm(instance=income_object)
+        obligation_object = Obligation.objects.get(pk=pk)
+        if obligation_object.user_profile_id == request.user.userprofile.id:
+            form_class = ObligationForm(instance=obligation_object)
             form_class.get_selects(request.user.userprofile.id)
         else:
             raise Http404
@@ -47,8 +47,8 @@ class ObligationUpdateView(View):
 
     @staticmethod
     def post(request, pk):
-        income_object = Obligation.objects.get(pk=pk)
-        form = ObligationForm(request.POST, instance=income_object)
+        obligation_object = Obligation.objects.get(pk=pk)
+        form = ObligationForm(request.POST, instance=obligation_object)
         if form.is_valid():
             obligation_value = form.save(commit=False)
             if obligation_value.user_profile_id == request.user.userprofile.id:
@@ -58,7 +58,7 @@ class ObligationUpdateView(View):
                 raise PermissionDenied
 
 
-class ObligationDeleteView(BaseDeleteView):
+class ObligationDeleteView(LoginRequiredMixin, AjaxDeleteView):
     model = Obligation
     template_name = 'obligations/obligation_delete.html'
     success_url = reverse_lazy('obligations:list_obligation')

@@ -1,14 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Obligation</title>
-</head>
-<body>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="enviar">
-    </form>
-</body>
-</html>
+{% extends 'dashboard/base_dashboard.html' %}
+{% block title %}Crear Obligacion | ahorra-app{% endblock title %}
+{% block content_main %}
+    <a href="{% url 'obligations:list_obligation' %}" class="top-nav full hide-on-large-only" id="retroceso"><i class="material-icons menu_icono">chevron_left</i></a>
+    <div class="container">
+        <h4>Crear obligación</h4>
+        <br>
+        <div class="row">
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-field col s12">
+                    {{ form.name_obligation }}
+                    <label for="name_obligation">Nombre de la obligación</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.value_obligation }}
+                    <label for="value_obligation">Valor de la obligación</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.account }}
+                    <label>Cuenta</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.type_obligation }}
+                    <label>Tipo de obligación</label>
+                </div>
+                <div class="switch col s12">
+                    <label>
+                        pago pendiente
+                        {{ form.completed }}
+                        <span class="lever"></span>
+
+                        Pago realizado
+                    </label>
+                </div>
+
+                <div class="col s12">
+                    <br>
+                    <label for="end_obligation">Fecha de vencimiento de la obligación</label>
+                    {{ form.end_obligation }}
+
+                    <button class="waves-effect waves-light btn-large guardar" type="submit"><i class="material-icons">save</i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% block custom_js %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('select').material_select();
+                $('#retroceso').show();
+                $('#menu').hide();
+                $('.datepicker').pickadate({
+                //selectMonths: true, // Creates a dropdown to control month
+                //selectYears: 15 // Creates a dropdown of 15 years to control year
+                    format: 'd/mm/yyyy'
+                });
+            });
+        </script>
+    {% endblock custom_js %}
+{% endblock %}

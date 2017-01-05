@@ -16,34 +16,39 @@ function saludo() {
 		document.getElementById('saludo').innerHTML = 'Buenos días, '+user;
 	}
 }
-/*codigo para eliminar elementos*/
-// function eliminar(text, enlance) {
-// 	$('.eliminar').click(function () {
-//             var id = $(this).attr("id");
-//             console.log(id);
-//             swal({
-//                         title: "Estas seguro?",
-//                         text:  text,
-//                         type: "warning",
-//                         showCancelButton: true,
-//                         confirmButtonColor: "#DD6B55",
-//                         confirmButtonText: "Si, borrarla!",
-//                         closeOnConfirm: false
-//             },
-//                     function(){
-//
-//                         div_deleted = 'div#' + id;
-//                         console.log(div_deleted);
-//                         url_id = enlance + id;
-//                         $.ajax({
-//                             url: url_id,
-//                             type: 'get',
-//                             success: function (data) {
-//                                 console.log(data);
-//                                 $(div_deleted).hide();
-//                                 swal("Deleted!", "Se elimino correctamente.", "success");
-//                             }
-//                         });
-//             });
-//         });
-// }
+
+//esta seccion es en las consultas con manejo de fecha
+moment.locale('es-do');
+var mes_actual = moment().month();
+var ano_actual = moment().year();
+document.getElementById('incremento').addEventListener('click', incremento_fecha);
+document.getElementById('decremento').addEventListener('click', decremento_fecha);
+function mostrar_fecha() {
+
+	document.getElementById('mes').innerHTML= moment().month(mes_actual).format("MMMM");
+	document.getElementById('año').innerHTML= moment().year(ano_actual).format("YYYY");
+}
+function decremento_fecha() {
+	if(mes_actual >=0 && mes_actual <=11){
+		mes_actual = mes_actual -1;
+	}
+	if(mes_actual < 0){
+		mes_actual = 11;
+		ano_actual -= 1;
+	}
+	document.getElementById('mes').innerHTML= moment().month(mes_actual).format("MMMM");
+	document.getElementById('año').innerHTML= moment().year(ano_actual).format("YYYY");
+	consulta(mes_actual, ano_actual);
+}
+function incremento_fecha() {
+	if(mes_actual >=0 && mes_actual <=11){
+		mes_actual = mes_actual +1;
+	}
+	if(mes_actual > 11){
+		mes_actual = 0;
+		ano_actual +=1;
+	}
+	document.getElementById('mes').innerHTML= moment().month(mes_actual).format("MMMM");
+	document.getElementById('año').innerHTML= moment().year(ano_actual).format("YYYY");
+	consulta(mes_actual, ano_actual);
+}

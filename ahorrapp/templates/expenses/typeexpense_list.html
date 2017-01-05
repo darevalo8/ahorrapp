@@ -1,20 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Type Expense</title>
-</head>
-<body>
-    {% if type_expenses %}
-        {% for type_expense in  type_expenses %}
-            <p>
-                {{ type_expense.type }} <a href="{% url 'expenses:update_typeexpense' type_expense.id %}">Editar</a>
-                <a href="{% url 'expenses:delete_typeexpense' type_expense.id %}">Eliminar</a>
-            </p>
-        {% endfor %}
-    {% else %}
-        <p>No hay registros</p>
-    {% endif %}
-    <a href="{% url 'expenses:create_typeexpense' %}">Crear</a>
-</body>
-</html>
+{% extends 'dashboard/base_dashboard.html' %}
+{% load staticfiles %}
+{% load humanize %}
+{% block title %}Tipo de Gasto|Ahorra-app{% endblock title %}
+{% block custom_style %}
+    <link rel="stylesheet" href="{% static 'bower_components/sweetalert/dist/sweetalert.css' %}">
+{% endblock custom_style %}
+{% block content_main %}
+    <ul class="tabs">
+        <li class="tab col s3"><a href="{% url 'expenses:list_expense' %}" target="_self">Mis gastos</a></li>
+        <li class="tab col s3"><a href="#" class="active">Tipos de gasto</a></li>
+    </ul>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                {% for type_expense in type_expenses %}
+                    <div id="{{ type_expense.id }}">
+                        <ul class="collapsible" data-collapsible="accordion">
+                            <li>
+                                <div class="collapsible-header">
+                                    <i class="material-icons">label_outline</i>
+                                    {{ type_expense.type}}
+                                    <a href="#"><span><i class="material-icons right eliminar" id="{{ type_expense.id }}">delete</i></span></a>
+                                    <a href="{% url 'expenses:update_typeexpense' type_expense.id %}"><span><i class="material-icons right edit">mode_edit</i></span></a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                {% empty %}
+                    <p>No hay tipos de gasto</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large red" href="{% url 'expenses:create_typeexpense' %}"><i class="large material-icons">add</i></a>
+        </div>
+    </div>
+{% endblock content_main %}
+{% block custom_js %}
+    <script src="{% static 'bower_components/sweetalert/dist/sweetalert.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('ul.tabs').tabs();
+            $('.eliminar').click(function () {
+            var id = $(this).attr("id");
+            console.log(id);
+            swal({
+                        title: "¿Esta seguro?",
+                        text: "¿ Deseas eliminar este tipo de gasto ?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Si, borrar!",
+                        closeOnConfirm: false
+            },
+                    function(){
+                        var div_deleted = 'div#' + id;
+                        var url_id = '/gastos/delete/type-expense/' + id;
+                        console.log(div_deleted);
+                        $.ajax({
+                            url: url_id,
+                            type: 'get',
+                            success: function (data) {
+                                console.log(data);
+                                $(div_deleted).hide();
+                                swal("¡Eliminado!", "El tipo de gasto se eliminó correctamente.", "success");
+                            }
+                        });
+            });
+        });
+        });
+
+    </script>
+{% endblock custom_js %}

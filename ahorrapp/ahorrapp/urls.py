@@ -22,8 +22,8 @@ urlpatterns = [
     url(r'^auth/', include('social.apps.django_app.urls', namespace='social')),
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^cuentas/', include('incomes.urls', namespace='incomes')),
-    url(r'^expenses/', include('expenses.urls', namespace='expenses')),
-    url(r'^obligations/', include('obligations.urls', namespace='obligations')),
+    url(r'^gastos/', include('expenses.urls', namespace='expenses')),
+    url(r'^obligaciones/', include('obligations.urls', namespace='obligations')),
     url(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
     url(r'^$', landing, name='landing'),
 

@@ -3,9 +3,9 @@
         <i class="large material-icons">add</i>
     </a>
     <ul>
-        <li><a class="btn-floating red"><i class="material-icons">credit_card</i></a></li>
-        <li><a class="btn-floating yellow darken-1"><i class="material-icons">local_atm</i></a></li>
-        <li><a class="btn-floating green"><i class="material-icons">account_balance_wallet</i></a></li>
-        <li><a class="btn-floating blue"><i class="material-icons">account_balance</i></a></li>
+        <li><a class="btn-floating red tooltipped" href="{% url 'expenses:create_expense' %}" data-position="top" data-delay="50" data-tooltip="Crear gasto"><i class="material-icons">credit_card</i></a></li>
+        <li><a class="btn-floating yellow darken-1 tooltipped" href="{% url 'obligations:create_obligation' %}" data-position="top" data-delay="50" data-tooltip="Crear obligación"><i class="material-icons">local_atm</i></a></li>
+        <li><a class="btn-floating green tooltipped" href="{% url 'incomes:create_income' %}" data-position="top" data-delay="50" data-tooltip="Crear ingreso"><i class="material-icons">account_balance_wallet</i></a></li>
+        <li><a class="btn-floating blue tooltipped" href="{% url 'incomes:create_account' %}" data-position="top" data-delay="50" data-tooltip="Crear cuenta"><i class="material-icons">account_balance</i></a></li>
     </ul>
 </div>

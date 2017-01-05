@@ -1,4 +1,9 @@
-from django.shortcuts import render
+import calendar
+import datetime
+import json
+from django.utils import timezone
+from django.shortcuts import render, redirect
+from django.core import serializers
 from django.views.generic import (View,
                                   CreateView,
                                   UpdateView,
@@ -18,8 +23,15 @@ class BaseListView(View):
 
     def get(self, request):
         context = {}
+        current_date = timezone.now()
+        max_day = max_days(current_date.year, current_date.month)
+        start_date = datetime.date(current_date.year,
+                                   current_date.month, 1)
+        end_date = datetime.date(current_date.year,
+                                 current_date.month, max_day[1])
         context[self.context_object_name] = self.moodel.objects.filter(
-            user_profile=request.user.userprofile.id)
+            user_profile=request.user.userprofile.id,
+            created__range=(start_date, end_date))
         return render(request, self.template_name, context)
 
 
@@ -109,32 +121,42 @@ class AjaxDeleteView(View):
         else:
             raise Http404
 
-# class CreateIncome(View):
-#     """
-#     el que vaya a  usar este helper, se tiene que crear
-#     el metodo get_selects en su form class
-#     """
-#
-#     template_name = ''
-#     form_class = None
-#     succes_url = None
-#
-#     def get(self, request):
-#         form_instance = self.form_class()
-#         form_instance.get_selects(request.user.userprofile.id)
-#         return render(request, self.template_name, {'form': form_instance})
-#
-#     def post(self, request):
-#         form_instance = self.form_class()
-#         if form_instance.is_valid():
-#             income = form_instance.save(commit=False)
-#             income.user_profile_id = request.user.userprofile.id
-#             income.save()
-#             return redirect('expenses:list_expense')
-#
-#     def get_succes_url(self):
-#         url = ''
-#         if self.succes_url:
-#             url = force_text(self.succes_url)
-#             print(url)
-#         return url
+
+class AjaxListView(BaseListView):
+
+    def get(self, request):
+        date = self.get_date()
+        max_day = max_days(date['year'], date['month'])
+        start_date = datetime.date(date['year'], date['month'], 1)
+        end_date = datetime.date(date['year'], date['month'], max_day[1])
+        object_list = self.moodel.objects.filter(
+            user_profile=request.user.userprofile.id,
+            created__range=(start_date, end_date))
+        # listado = [{'nombre_ingreso': obj.nombre_ingreso} for obj in objeto]
+        # response = json.dumps(listado)
+        response = serializers.serialize("json", object_list, use_natural_keys=True)
+        return HttpResponse(response, content_type="application/json")
+
+    def get_date(self):
+        date = {}
+        if self.request.is_ajax():
+            date['month'] = int(self.request.GET['mes'])
+            date['year'] = int(self.request.GET['year'])
+            return date
+        else:
+            return redirect('/')
+
+
+def max_days(year, month):
+    max_day = calendar.monthrange(year, month)
+    print("hola")
+    return max_day
+
+
+class TypeListView(BaseListView):
+
+    def get(self, request):
+        context = {}
+        context[self.context_object_name] = self.moodel.objects.filter(
+            user_profile=request.user.userprofile.id,)
+        return render(request, self.template_name, context)

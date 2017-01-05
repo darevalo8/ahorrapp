@@ -42,12 +42,12 @@
     <script type="text/javascript">
         $(document).ready(function(){
             $('ul.tabs').tabs();
-        });
-        $('.eliminar').click(function () {
+
+            $('.eliminar').click(function () {
             var id = $(this).attr("id");
             console.log(id);
             swal({
-                        title: "Estas seguro?",
+                        title: "¿Esta seguro?",
                         text: "¿ Deseas eliminar este tipo de ingreso ?",
                         type: "warning",
                         showCancelButton: true,
@@ -65,10 +65,12 @@
                             success: function (data) {
                                 console.log(data);
                                 $(div_deleted).hide();
-                                swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                swal("¡Eliminado!", "El tipo de ingreso se eliminó correctamente.", "success");
                             }
                         });
             });
         });
+        });
+
     </script>
 {% endblock custom_js %}

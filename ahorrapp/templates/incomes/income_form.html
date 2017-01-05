@@ -34,11 +34,11 @@
     </div>
     {% block custom_js %}
         <script type="text/javascript">
-            $('select').material_select();
-            $('#retroceso').show();
-            $('#menu').hide();
-{#            document.getElementById('retroceso').style.display = 'inherit';#}
-{#            document.getElementById('menu').style.display = 'none';#}
+            $(document).ready(function () {
+                $('select').material_select();
+                $('#retroceso').show();
+                $('#menu').hide();
+            });
         </script>
     {% endblock custom_js %}
 {% endblock %}

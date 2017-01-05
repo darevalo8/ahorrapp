@@ -4,6 +4,7 @@ from django.views.generic import View
 from users.viewmixins import LoginRequiredMixin
 
 
+
 class Dashboard(LoginRequiredMixin, View):
 
     @staticmethod
@@ -13,7 +14,7 @@ class Dashboard(LoginRequiredMixin, View):
 
 
 def get_frase():
-    numero = random.randrange(5)
+    numero = random.randrange(6)
     frases = {
         'frases': [
             {
@@ -46,6 +47,11 @@ def get_frase():
                          'en aprender a comprender qué nos induce '
                          'a hacer lo que hacemos. ',
                 'autor': 'Anthony Robbins.'
+            },
+            {
+                'texto': 'Las personas lo suficientemente locas como para '
+                         'pensar que pueden cambiar el mundo sonla que lo cambia',
+                'autor': 'Piensa diferente apple'
             }
         ]
     }

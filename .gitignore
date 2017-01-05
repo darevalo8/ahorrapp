@@ -8,9 +8,6 @@ ahorrapp/.idea/*
 
 ahorrapp/static/bower_components/*
 
-ahorrapp/manage.py
-
-ahorrapp/ahorrapp/settings/local.py
 
 
 

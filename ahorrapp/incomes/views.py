@@ -9,7 +9,9 @@ from .forms import IcomeForm
 from .helpers import (BaseListView,
                       BaseCreateView,
                       BaseUpdateView,
-                      AjaxDeleteView)
+                      AjaxDeleteView,
+                      AjaxListView,
+                      TypeListView)
 
 
 class AccountCreateView(LoginRequiredMixin, BaseCreateView):
@@ -97,7 +99,7 @@ class TypeIncomeCreateView(AccountCreateView):
     success_url = reverse_lazy('incomes:list_type')
 
 
-class TypeIncomeListView(LoginRequiredMixin, BaseListView):
+class TypeIncomeListView(LoginRequiredMixin, TypeListView):
     moodel = TypeIncome
     template_name = 'incomes/typeincome_list.html'
     context_object_name = 'type_incomes'
@@ -113,8 +115,5 @@ class TypeIncomeDeleteView(AccountDeleteView):
     model = TypeIncome
 
 
-# class Delete1(LoginRequiredMixin, AjaxDeleteView):
-#     model = Account
-# def delete(request, pk):
-#     if request.is_ajax():
-#         print('holaaaa {0}'.format(pk))
+class IncomesAjaxList(AjaxListView):
+    moodel = Income

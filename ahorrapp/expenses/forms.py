@@ -19,3 +19,6 @@ class ExpenseForm(forms.ModelForm):
             'account',
             'description',
             'type_expense')
+        widgets = {
+            'description': forms.Textarea(attrs={'class': 'materialize-textarea'}),
+        }

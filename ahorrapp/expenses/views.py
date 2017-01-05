@@ -6,13 +6,14 @@ from django.core.exceptions import PermissionDenied
 from incomes.helpers import (BaseCreateView,
                              BaseListView,
                              BaseUpdateView,
-                             BaseDeleteView)
+                             AjaxDeleteView,
+                             TypeListView)
 from users.viewmixins import LoginRequiredMixin
 from .models import TypeExpense, Expense
 from .forms import ExpenseForm
 
 
-class TypeExpenseListView(LoginRequiredMixin, BaseListView):
+class TypeExpenseListView(LoginRequiredMixin, TypeListView):
     moodel = TypeExpense
     template_name = 'expenses/typeexpense_list.html'
     context_object_name = 'type_expenses'
@@ -30,10 +31,8 @@ class TypeExpenseUpdateView(LoginRequiredMixin, BaseUpdateView):
     success_url = reverse_lazy('expenses:list_typeexpense')
 
 
-class TypeExpenseDeleteView(LoginRequiredMixin, BaseDeleteView):
+class TypeExpenseDeleteView(LoginRequiredMixin, AjaxDeleteView):
     model = TypeExpense
-    success_url = reverse_lazy('expenses:list_typeexpense')
-    template_name = 'expenses/typeexpense_delete.html'
 
 
 class ExpenseCreateView(LoginRequiredMixin, View):
@@ -87,5 +86,3 @@ class ExpenseListView(LoginRequiredMixin, BaseListView):
 
 class ExpenseDeleteView(TypeExpenseDeleteView):
     model = Expense
-    success_url = reverse_lazy('expenses:list_expense')
-    template_name = 'expenses/expense_delete.html'

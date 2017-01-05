@@ -1,22 +1,85 @@
+{% extends 'dashboard/base_dashboard.html' %}
+{% load staticfiles %}
 {% load humanize %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {% for obligation in obligations %}
-        <p>
-            {{ obligation.name_obligation }}-{{ obligation.value_obligation|intcomma }}
-            <a href="{% url 'obligations:update_obligation' obligation.id %}">Actualizar</a>
-            <a href="{% url 'obligations:delete_obligation' obligation.id %}">Eliminar</a>
-        </p>
-    {% empty %}
-        <p>No hay obligaciones pendientes...</p>
-    {% endfor %}
+{% block title %}Mis Obligaciones|Ahorra-app{% endblock title %}
+{% block custom_style %}
+    <link rel="stylesheet" href="{% static 'bower_components/sweetalert/dist/sweetalert.css' %}">
+{% endblock custom_style %}
+{% block content_main %}
+    <ul class="tabs">
+        <li class="tab col s3"><a href="#" class="active">Mis Obligaciones</a></li>
+    </ul>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                {% for obligation in obligations %}
+                    <div id="{{ obligation.id }}">
+                        <ul class="collapsible" data-collapsible="accordion">
+                            <li>
+                                <div class="collapsible-header">
+                                    <i class="material-icons">keyboard_arrow_down</i>
+                                    {{ obligation.name_obligation }}
+                                    <a href="#"><span><i class="material-icons right eliminar" id="{{ obligation.id }}">delete</i></span></a>
+                                    <a href="{% url 'obligations:update_obligation' obligation.id %}"><span><i class="material-icons right edit">mode_edit</i></span></a>
+                                </div>
+                                <div class="collapsible-body">
+                                    <p>Valor: {{ obligation.value_obligation|intcomma }}</p>
+                                    <p>Cuenta: {{ obligation.account }}</p>
+                                    <p>Tipo de obligación: {{ obligation.get_type_obligation_display }}</p>
+                                    {% if obligation.completed %}
+                                        <p>Pago: Realizado</p>
+                                    {% else %}
+                                        <p>Pago: Pendiente</p>
+                                    {% endif %}
+                                    <p>Fecha de vencimiento: {{ obligation.end_obligation }}</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                {% empty %}
+                    <p>No hay obligaciones</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="fixed-action-btn">
+            <a class="btn-floating btn-large red" href="{% url 'obligations:create_obligation' %}"><i class="large material-icons">add</i></a>
+        </div>
+    </div>
+{% endblock content_main %}
+{% block custom_js %}
+    <script src="{% static 'bower_components/sweetalert/dist/sweetalert.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('ul.tabs').tabs();
+            $('.eliminar').click(function () {
+            var id = $(this).attr("id");
+            console.log(id);
+            swal({
+                        title: "Estas seguro?",
+                        text: "¿ Deseas eliminar este tipo de ingreso ?",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Si, borrarla!",
+                        closeOnConfirm: false
+            },
+                    function(){
+                        var div_deleted = 'div#' + id;
+                        var url_id = '/obligaciones/delete/' + id;
+                        console.log(div_deleted);
+                        $.ajax({
+                            url: url_id,
+                            type: 'get',
+                            success: function (data) {
+                                console.log(data);
+                                $(div_deleted).hide();
+                                swal("Deleted!", "La obligación se eliminó correctamente.", "success");
+                            }
+                        });
+            });
+        });
+        });
 
-    <a href="{% url 'obligations:create_obligation' %}">Crear</a>
-
-</body>
-</html>
+    </script>
+{% endblock custom_js %}

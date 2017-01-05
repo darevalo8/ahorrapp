@@ -1,14 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create Expense</title>
-</head>
-<body>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Guardar">
-    </form>
-</body>
-</html>
+{% extends 'dashboard/base_dashboard.html' %}
+{% block title %}Crear gasto | ahorra-app{% endblock title %}
+{% block content_main %}
+    <a href="{% url 'expenses:list_typeexpense' %}" class="top-nav full hide-on-large-only" id="retroceso"><i class="material-icons menu_icono">chevron_left</i></a>
+    <div class="container">
+        <h4>Crear ingreso</h4>
+        <br>
+        <div class="row">
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-field col s12">
+                    {{ form.name_expense }}
+                    <label for="name_expense">Nombre del gasto</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.value_expense }}
+                    <label for="value_expense">Valor del gasto</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.account }}
+                    <label>Cuenta</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.type_expense }}
+                    <label>Tipo de gasto</label>
+                </div>
+                <div class="input-field col s12">
+                    {{ form.description }}
+                    <label for="description">Descripción</label>
+                    <button class="waves-effect waves-light btn-large guardar" type="submit"><i class="material-icons">save</i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% block custom_js %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('select').material_select();
+                $('#retroceso').show();
+                $('#menu').hide();
+            });
+
+{#            document.getElementById('retroceso').style.display = 'inherit';#}
+{#            document.getElementById('menu').style.display = 'none';#}
+        </script>
+    {% endblock custom_js %}
+{% endblock %}

@@ -1,14 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create</title>
-</head>
-<body>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="guardar">
-    </form>
-</body>
-</html>
+{% extends 'dashboard/base_dashboard.html' %}
+{% block title %}Crear tipo gasto | ahorra-app{% endblock title %}
+{% block content_main %}
+    <a href="{% url 'expenses:list_typeexpense' %}" class="top-nav full hide-on-large-only" id="retroceso"><i class="material-icons menu_icono">chevron_left</i></a>
+    <div class="container">
+        <h4>Crear tipo de gasto</h4>
+        <br>
+        <div class="row">
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-field col s12">
+                    {{ form.type }}
+                    <label for="type">Tipo de gasto</label>
+                    <button class="waves-effect waves-light btn-large guardar" type="submit"><i class="material-icons">save</i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% block custom_js %}
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('select').material_select();
+                $('#retroceso').show();
+                $('#menu').hide();
+            });
+        </script>
+    {% endblock custom_js %}
+{% endblock %}

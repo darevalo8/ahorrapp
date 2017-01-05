@@ -18,7 +18,7 @@
                             </div>
                             <div class="card-content">
                                 <span class="card-title activator grey-text text-darken-4">{{ account.name_account }}<i class="material-icons right">more_vert</i></span>
-                                <p>Saldo: {{ account.saldo_total|intcomma }}</p>
+                                <p>Saldo: $ {{ account.saldo_total|intcomma }}</p>
                             </div>
                             <div class="card-action">
                                 <a href="{% url 'incomes:update_account' account.id %}"><span><i class="material-icons" id="editar">mode_edit</i></span></a>
@@ -27,7 +27,7 @@
                             <div class="card-reveal">
                                 <span class="card-title grey-text text-darken-4">{{ account.name_account }}<i class="material-icons right">close</i></span>
                                 <p>Creada el {{ account.created }}.</p>
-                                <p>Tipo de cuenta: {{ account.account_type }}</p>
+                                <p>Tipo de cuenta: {{ account.get_account_type_display }}</p>
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                             </div>
                             <div class="card-content">
                                 <span class="card-title activator grey-text text-darken-4">{{ account.name_account }}<i class="material-icons right">more_vert</i></span>
-                                <p>Saldo: {{ account.saldo_actual|intcomma }}</p>
+                                <p>Saldo: $ {{ account.saldo_actual|intcomma }}</p>
                             </div>
                             <div class="card-action">
                                 <a href="{% url 'incomes:update_account' account.id %}"><span><i class="material-icons" id="editar">mode_edit</i></span></a>
@@ -69,10 +69,8 @@
 {% block custom_js %}
     <script src="{% static 'bower_components/sweetalert/dist/sweetalert.min.js' %}"></script>
     <script type="text/javascript">
-{#        text = 'Si eliminas esta cuenta se borraran todos los ingresos, gastos y obligaciones asociados a ella';#}
-{#        enlace = '/cuentas/delete/';#}
-{#        eliminar(text, enlace);#}
-        $('.eliminar').click(function () {
+        $(document).ready(function () {
+            $('.eliminar').click(function () {
             var id = $(this).attr("id");
             console.log(id);
             swal({
@@ -96,10 +94,12 @@
                             success: function (data) {
                                 console.log(data);
                                 $(div_deleted).hide();
-                                swal("Deleted!", "Your imaginary file has been deleted.", "success");
+                                swal("Deleted!", "La cuenta ha sido eliminada correctamente.", "success");
                             }
                         });
             });
         });
+        });
+
     </script>
 {% endblock custom_js %}
