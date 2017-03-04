@@ -5,6 +5,11 @@ from incomes.models import TimeStampedModel, Account
 from users.models import UserProfile
 
 
+class ObligationManager(models.Manager):
+    def get_by_natural_key(self, tipo):
+        return self.get(type_obligation=tipo)
+
+
 class Obligation(TimeStampedModel):
     choice_obligation = (
         (1, 'Educacion'),
@@ -19,6 +24,10 @@ class Obligation(TimeStampedModel):
     user_profile = models.ForeignKey(UserProfile)
     account = models.ForeignKey(Account)
     completed = models.BooleanField(default=False)
+    objects = ObligationManager()
+
+    def natural_key(self):
+        return self.type_obligation
 
     def __str__(self):
         return self.name_obligation

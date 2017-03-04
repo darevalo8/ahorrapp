@@ -7,7 +7,11 @@ from incomes.helpers import (BaseCreateView,
                              BaseListView,
                              BaseUpdateView,
                              AjaxDeleteView,
-                             TypeListView)
+                             TypeListView,
+                             AjaxListView,
+                             AjaxGroupAccountView,
+                             AjaxGroupTypeView,
+                             BaseGroupAccount)
 from users.viewmixins import LoginRequiredMixin
 from .models import TypeExpense, Expense
 from .forms import ExpenseForm
@@ -86,3 +90,23 @@ class ExpenseListView(LoginRequiredMixin, BaseListView):
 
 class ExpenseDeleteView(TypeExpenseDeleteView):
     model = Expense
+
+
+class ExpenseAjaxList(LoginRequiredMixin, AjaxListView):
+    moodel = Expense
+
+
+class ExpenseGroupView(LoginRequiredMixin, BaseGroupAccount):
+    moodel = Expense
+    template_name = 'expenses/expense_group.html'
+    context_object_name = 'grupos'
+
+
+class ExpenseGroupAccountView(LoginRequiredMixin,
+                              AjaxGroupAccountView):
+    moodel = Expense
+
+
+class ExpenseGroupTypeView(LoginRequiredMixin,
+                           AjaxGroupTypeView):
+    moodel = Expense

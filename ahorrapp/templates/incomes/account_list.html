@@ -1,7 +1,7 @@
-{% extends 'dashboard/base_dashboard.html' %}
+{% extends 'base_list_modules.html' %}
 {% load staticfiles %}
 {% load humanize %}
-{% block title %}Mis Cuentas|Ahorra-app{% endblock title %}
+{% block title %}Mis Cuentas | Ahorra-app{% endblock title %}
 {% block custom_style %}
     <link rel="stylesheet" href="{% static 'bower_components/sweetalert/dist/sweetalert.css' %}">
 {% endblock custom_style %}
@@ -10,55 +10,52 @@
         <h4>Lista de cuentas</h4>
         <div class="row">
             {% for account in accounts %}
-                {% if account.saldo_total %}
-                    <div class="col s12 m5 l5">
-                        <div class="card sticky-action">
-                            <div class="card-image waves-effect waves-block waves-light">
-                                <img class="activator" src="{% static 'images/office.jpg' %}">
-                            </div>
-                            <div class="card-content">
-                                <span class="card-title activator grey-text text-darken-4">{{ account.name_account }}<i class="material-icons right">more_vert</i></span>
-                                <p>Saldo: $ {{ account.saldo_total|intcomma }}</p>
-                            </div>
-                            <div class="card-action">
-                                <a href="{% url 'incomes:update_account' account.id %}"><span><i class="material-icons" id="editar">mode_edit</i></span></a>
-                                <a href="{% url 'incomes:delete_account' account.id %}"><span><i class="material-icons right" id="eliminar">delete</i></span></a>
-                            </div>
-                            <div class="card-reveal">
-                                <span class="card-title grey-text text-darken-4">{{ account.name_account }}<i class="material-icons right">close</i></span>
-                                <p>Creada el {{ account.created }}.</p>
-                                <p>Tipo de cuenta: {{ account.get_account_type_display }}</p>
-                            </div>
+                <div class="col s12 m6 l6" id="{{ account.id }}">
+                    <div class="card sticky-action" >
+                        <div class="card-image waves-effect waves-block waves-light">
+                            <img class="activator" src="{% static 'images/office.jpg' %}">
+                        </div>
+                        <div class="card-content">
+                            <span class="card-title activator grey-text text-darken-4">{{ account.name_account }}<i class="material-icons right">more_vert</i></span>
+                            <p>Saldo: $ {{ account.saldo_total|intcomma }}</p>
+                        </div>
+                        <div class="card-action">
+                            <a href="{% url 'incomes:update_account' account.id %}"><span><i class="material-icons" id="editar">mode_edit</i></span></a>
+                            <a href="#"><span><i class="material-icons right eliminar" id="{{ account.id }}">delete</i></span></a>
+                        </div>
+                        <div class="card-reveal">
+                            <span class="card-title grey-text text-darken-4">{{ account.name_account }}<i class="material-icons right">close</i></span>
+                            <p>Creada el {{ account.created }}.</p>
+                            <p>Tipo de cuenta: {{ account.get_account_type_display }}</p>
                         </div>
                     </div>
-                    <div class="col s12 m1 l2"></div>
-                {% else %}
-                    <div class="col s12 m5 l5" id="{{ account.id }}">
-                        <div class="card sticky-action">
-                            <div class="card-image waves-effect waves-block waves-light">
-                                <img class="activator" src="{% static 'images/office.jpg' %}">
-                            </div>
-                            <div class="card-content">
-                                <span class="card-title activator grey-text text-darken-4">{{ account.name_account }}<i class="material-icons right">more_vert</i></span>
-                                <p>Saldo: $ {{ account.saldo_actual|intcomma }}</p>
-                            </div>
-                            <div class="card-action">
-                                <a href="{% url 'incomes:update_account' account.id %}"><span><i class="material-icons" id="editar">mode_edit</i></span></a>
+                </div>
+{#                <div class="col s12 m1 l1"></div>#}
+{#                {% else %}#}
+{#                    <div class="col s12 m5 l5" id="{{ account.id }}">#}
+{#                        <div class="card sticky-action">#}
+{#                            <div class="card-image waves-effect waves-block waves-light">#}
+{#                                <img class="activator" src="{% static 'images/office.jpg' %}">#}
+{#                            </div>#}
+{#                            <div class="card-content">#}
+{#                                <span class="card-title activator grey-text text-darken-4">{{ account.name_account }}<i class="material-icons right">more_vert</i></span>#}
+{#                                <p>Saldo: $ {{ account.saldo_actual|intcomma }}</p>#}
+{#                            </div>#}
+{#                            <div class="card-action">#}
+{#                                <a href="{% url 'incomes:update_account' account.id %}"><span><i class="material-icons" id="editar">mode_edit</i></span></a>#}
 {#                                <a href="{% url 'incomes:delete_account' account.id %}"><span><i class="material-icons right" id="eliminar">delete</i></span></a>#}
-                                <a href="#"><span><i class="material-icons right eliminar" id="{{ account.id }}">delete</i></span></a>
-                            </div>
-                            <div class="card-reveal">
-                                <span class="card-title grey-text text-darken-4">{{ account.name_account }}<i class="material-icons right">close</i></span>
-                                <p>Creada el {{ account.created }}.</p>
-                                <p>Tipo de cuenta: {{ account.get_account_type_display }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col s12 m1 l1"></div>
-                {% endif %}
+{#                                <a href="#"><span><i class="material-icons right eliminar" id="{{ account.id }}">delete</i></span></a>#}
+{#                            </div>#}
+{#                            <div class="card-reveal">#}
+{#                                <span class="card-title grey-text text-darken-4">{{ account.name_account }}<i class="material-icons right">close</i></span>#}
+{#                                <p>Creada el {{ account.created }}.</p>#}
+{#                                <p>Tipo de cuenta: {{ account.get_account_type_display }}</p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                    <div class="col s12 m1 l1"></div>#}
             {% empty %}
                 <div class="col s12 m4 l2"><p>No tienes cuentas aún.</p></div>
-
             {% endfor %}
         </div>
     </div>
@@ -71,34 +68,13 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('.eliminar').click(function () {
-            var id = $(this).attr("id");
-            console.log(id);
-            swal({
-                        title: "Estas seguro?",
-                        text: "Si eliminas esta cuenta se borraran todos los ingresos, gastos y obligaciones " +
-                        "asociados a ella",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Si, borrarla!",
-                        closeOnConfirm: false
-            },
-                    function(){
-                        var div_deleted = 'div#' + id;
-                        var url_id = '/cuentas/delete/' + id;
-                        console.log(div_deleted);
-                        $.ajax({
-                            data: {'pk': id},
-                            url: url_id,
-                            type: 'get',
-                            success: function (data) {
-                                console.log(data);
-                                $(div_deleted).hide();
-                                swal("Deleted!", "La cuenta ha sido eliminada correctamente.", "success");
-                            }
-                        });
+                var id = $(this).attr("id"), text1, text2, model;
+                text1 = "Si eliminas esta cuenta se borraran todos los ingresos, gastos y obligaciones asociados a ella";
+                text2 = "La cuenta ha sido eliminada correctamente.";
+                model = 'account';
+                delete_object(text1, text2, id, model);
+                console.log(id);
             });
-        });
         });
 
     </script>

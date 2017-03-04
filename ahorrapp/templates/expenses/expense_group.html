@@ -1,0 +1,95 @@
+{% extends 'base_list_modules.html' %}
+{% load staticfiles %}
+{% load humanize %}
+{% block title %}Agrupar Gastos | Ahorra-app{% endblock title %}
+{% block content_main %}
+    <a href="{% url 'expenses:list_expense' %}" class="top-nav full hide-on-large-only" id="retroceso"><i class="material-icons menu_icono">chevron_left</i></a>
+    <ul class="tabs tabs-fixed-width">
+        <li class="tab col s3 "><a href="#cuenta" id="account">Cuenta</a></li>
+        <li class="tab col s3"><a href="#tipo_expense" id="type_income">Tipos de gasto</a></li>
+    </ul>
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12" id="main">
+                <h5 class="center">
+                    <i class="material-icons left tooltipped" id="decremento" data-position="left" data-delay="50" data-tooltip="Anterior">keyboard_arrow_left</i>
+                    <span id="mes"></span>
+                    de
+                    <span id="año"></span>
+                    <i class="material-icons right tooltipped" id="incremento" data-position="right" data-delay="50" data-tooltip="Siguiente">keyboard_arrow_right</i>
+                </h5>
+                <br/>
+                <div id="cuenta">
+                    <h4>Agrupar ingresos por cuenta</h4>
+                    <br>
+                    <table class="bordered centered">
+                        <thead>
+                            <tr>
+                                <th data-field="account">Cuenta</th>
+                                <th data-field="total">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="content_table">
+                            {% for grupo in grupos %}
+                                <tr class="remover">
+                                    <td>{{ grupo.name_account }}</td>
+                                    <td>$ {{ grupo.total|intcomma }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tipo_expense">
+                    <h4>Agrupar gastos por tipo de gasto</h4>
+                    <br>
+                    <table class="bordered centered">
+                        <thead>
+                            <tr>
+                                <th data-field="account">Tipo Gasto</th>
+                                <th data-field="total">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="content_table_type">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% include 'ajax_loader.html' %}
+        </div>
+    </div>
+{% endblock content_main %}
+{% block custom_js %}
+    <script src="{% static 'bower_components/sweetalert/dist/sweetalert.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var model = 'cuenta_expense';
+            mostrar_fecha();
+            $('#loader').hide();
+            $('ul.tabs').tabs();
+            $("#account").click(function () {
+                model = 'cuenta_expense';
+                consulta(mes_actual, ano_actual, model);
+            });
+            $("#type_income").click(function () {
+                model = 'tipo_expense';
+                consulta(mes_actual, ano_actual, model);
+            });
+            $('#incremento').click(function () {
+                incremento_fecha(model);
+                console.log(model);
+            });
+            $('#decremento').click(function () {
+                decremento_fecha(model);
+                console.log(model);
+            });
+            $('#retroceso').show();
+                $('#menu').hide();
+            
+        });
+{#        var model = 'income';#}
+{#        document.getElementById('incremento').addEventListener('click', incremento_fecha);#}
+{#        document.getElementById('decremento').addEventListener('click', decremento_fecha);#}
+    </script>
+{% endblock custom_js %}

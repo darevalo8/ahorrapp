@@ -3,7 +3,9 @@ from django.http import Http404
 from django.core.exceptions import PermissionDenied
 from django.views.generic import View
 from django.core.urlresolvers import reverse_lazy
-from incomes.helpers import BaseListView, AjaxDeleteView
+from incomes.helpers import (BaseListView,
+                             AjaxDeleteView,
+                             AjaxListView)
 from .forms import ObligationForm
 from .models import Obligation
 from users.viewmixins import LoginRequiredMixin
@@ -27,13 +29,13 @@ class ObligationCreateView(LoginRequiredMixin, View):
             return redirect('obligations:list_obligation')
 
 
-class ObligationListView(BaseListView):
+class ObligationListView(LoginRequiredMixin, BaseListView):
     moodel = Obligation
     template_name = 'obligations/obligation_list.html'
     context_object_name = 'obligations'
 
 
-class ObligationUpdateView(View):
+class ObligationUpdateView(LoginRequiredMixin, View):
     template_name = 'obligations/obligation_form.html'
 
     def get(self, request, pk):
@@ -62,3 +64,7 @@ class ObligationDeleteView(LoginRequiredMixin, AjaxDeleteView):
     model = Obligation
     template_name = 'obligations/obligation_delete.html'
     success_url = reverse_lazy('obligations:list_obligation')
+
+
+class ObligationAjaxListView(LoginRequiredMixin, AjaxListView):
+    moodel = Obligation

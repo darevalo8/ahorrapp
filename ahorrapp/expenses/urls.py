@@ -6,7 +6,11 @@ from .views import (TypeExpenseListView,
                     ExpenseCreateView,
                     ExpenseListView,
                     ExpenseUpdateView,
-                    ExpenseDeleteView)
+                    ExpenseDeleteView,
+                    ExpenseAjaxList,
+                    ExpenseGroupAccountView,
+                    ExpenseGroupTypeView,
+                    ExpenseGroupView)
 urlpatterns = [
     url(r'^list/type-expense/$',
         TypeExpenseListView.as_view(),
@@ -28,5 +32,17 @@ urlpatterns = [
     url(r'^delete/(?P<pk>\d+)/$',
         ExpenseDeleteView.as_view(),
         name='delete_expense'),
+    url(r'^consulta-gasto/$',
+        ExpenseAjaxList.as_view(),
+        name='consulta-gasto'),
+    url(r'^expense-account/$',
+        ExpenseGroupAccountView.as_view(),
+        name='group-account'),
+    url(r'^agrupacion-gastos/$',
+        ExpenseGroupView.as_view(),
+        name='group-expense'),
+    url(r'^expense-type/$',
+        ExpenseGroupTypeView.as_view(),
+        name='group-type'),
 
 ]

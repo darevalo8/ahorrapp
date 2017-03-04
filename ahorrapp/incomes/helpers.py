@@ -6,10 +6,9 @@ from django.shortcuts import render, redirect
 from django.core import serializers
 from django.views.generic import (View,
                                   CreateView,
-                                  UpdateView,
-                                  DeleteView)
+                                  UpdateView)
 from django.core.exceptions import PermissionDenied
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponse
 
 
 class BaseListView(View):
@@ -23,16 +22,22 @@ class BaseListView(View):
 
     def get(self, request):
         context = {}
+        date = self.get_star_and_end_date()
+        context[self.context_object_name] = self.moodel.objects.filter(
+            user_profile=request.user.userprofile.id,
+            created__range=(date['start_date'], date['end_date']))
+        return render(request, self.template_name, context)
+
+    def get_star_and_end_date(self):
         current_date = timezone.now()
         max_day = max_days(current_date.year, current_date.month)
         start_date = datetime.date(current_date.year,
                                    current_date.month, 1)
         end_date = datetime.date(current_date.year,
                                  current_date.month, max_day[1])
-        context[self.context_object_name] = self.moodel.objects.filter(
-            user_profile=request.user.userprofile.id,
-            created__range=(start_date, end_date))
-        return render(request, self.template_name, context)
+        dates = {'start_date': start_date, 'end_date': end_date}
+
+        return dates
 
 
 class BaseCreateView(CreateView):
@@ -79,33 +84,6 @@ class BaseUpdateView(UpdateView):
         return self.render_to_response(self.get_context_data(form=form))
 
 
-class BaseDeleteView(DeleteView):
-    """
-    esta clase funciona igual que la clase
-    BaseUpdate view, lo que cambia que
-    esta clase es para hacer una eliminacion
-    de registros
-    """
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.user_profile_id == request.user.userprofile.id:
-            context = self.get_context_data(object=self.object)
-            return self.render_to_response(context)
-        else:
-            raise Http404
-
-    def delete(self, request, *args, **kwargs):
-        if self.request.is_ajax():
-            print("holaaaa")
-        self.object = self.get_object()
-        success_url = self.get_success_url()
-        if self.object.user_profile_id == request.user.userprofile.id:
-            self.object.delete()
-        else:
-            raise PermissionDenied
-        return HttpResponseRedirect(success_url)
-
-
 class AjaxDeleteView(View):
     model = None
 
@@ -125,17 +103,12 @@ class AjaxDeleteView(View):
 class AjaxListView(BaseListView):
 
     def get(self, request):
-        date = self.get_date()
-        max_day = max_days(date['year'], date['month'])
-        start_date = datetime.date(date['year'], date['month'], 1)
-        end_date = datetime.date(date['year'], date['month'], max_day[1])
+        dates = self.get_star_and_end_date()
         object_list = self.moodel.objects.filter(
             user_profile=request.user.userprofile.id,
-            created__range=(start_date, end_date))
-        # listado = [{'nombre_ingreso': obj.nombre_ingreso} for obj in objeto]
-        # response = json.dumps(listado)
+            created__range=(dates['start_date'], dates['end_date']))
         response = serializers.serialize("json", object_list, use_natural_keys=True)
-        return HttpResponse(response, content_type="application/json")
+        return HttpResponse(response, content_type='application/json')
 
     def get_date(self):
         date = {}
@@ -146,10 +119,17 @@ class AjaxListView(BaseListView):
         else:
             return redirect('/')
 
+    def get_star_and_end_date(self):
+        date = self.get_date()
+        max_day = max_days(date['year'], date['month'])
+        start_date = datetime.date(date['year'], date['month'], 1)
+        end_date = datetime.date(date['year'], date['month'], max_day[1])
+        dates = {'start_date': start_date, 'end_date': end_date}
+        return dates
+
 
 def max_days(year, month):
     max_day = calendar.monthrange(year, month)
-    print("hola")
     return max_day
 
 
@@ -160,3 +140,40 @@ class TypeListView(BaseListView):
         context[self.context_object_name] = self.moodel.objects.filter(
             user_profile=request.user.userprofile.id,)
         return render(request, self.template_name, context)
+
+
+class BaseGroupAccount(BaseListView):
+    def get(self, request):
+        context = {}
+        date = self.get_star_and_end_date()
+        context[self.context_object_name] = self.moodel.objects.total_group_account(
+            user_profile=request.user.userprofile.id,
+            fecha_i=date['start_date'],
+            fecha_f=date['end_date'])
+        return render(request, self.template_name, context)
+
+
+class AjaxGroupAccountView(AjaxListView):
+    def get(self, request):
+        dates = self.get_star_and_end_date()
+
+        object_list = self.moodel.objects.total_group_account(
+            user_profile=request.user.userprofile.id,
+            fecha_i=dates['start_date'],
+            fecha_f=dates['end_date'])
+        # response = serializers.serialize("json", object_list)
+        response = json.dumps(object_list)
+        return HttpResponse(response, content_type='application/json')
+
+
+class AjaxGroupTypeView(AjaxGroupAccountView):
+    def get(self, request):
+        dates = self.get_star_and_end_date()
+
+        object_list = self.moodel.objects.total_group_type(
+            user_profile=request.user.userprofile.id,
+            fecha_i=dates['start_date'],
+            fecha_f=dates['end_date'])
+        # response = serializers.serialize("json", object_list)
+        response = json.dumps(object_list)
+        return HttpResponse(response, content_type='application/json')

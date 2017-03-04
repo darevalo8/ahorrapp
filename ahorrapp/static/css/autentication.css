@@ -21,8 +21,9 @@ configuracion de los botones sociales
 .tabs .tab a{
 	color: black;
 }
-.tabs .tab a:hover{
+.tabs .tab a:hover, .tabs .tab a.active{
 	color: black;
+	background-color: #f1f8e9;
 }
 #registro, #sesion{
 	color: grey;

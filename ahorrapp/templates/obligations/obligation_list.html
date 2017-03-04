@@ -1,4 +1,4 @@
-{% extends 'dashboard/base_dashboard.html' %}
+{% extends 'base_list_modules.html' %}
 {% load staticfiles %}
 {% load humanize %}
 {% block title %}Mis Obligaciones|Ahorra-app{% endblock title %}
@@ -6,15 +6,23 @@
     <link rel="stylesheet" href="{% static 'bower_components/sweetalert/dist/sweetalert.css' %}">
 {% endblock custom_style %}
 {% block content_main %}
-    <ul class="tabs">
+    <ul class="tabs tabs-fixed-width">
         <li class="tab col s3"><a href="#" class="active">Mis Obligaciones</a></li>
     </ul>
     <br>
     <div class="container">
         <div class="row">
-            <div class="col s12 m12 l12">
+            <div class="col s12 m12 l12" id="main">
+                <h5 class="center">
+                    <i class="material-icons left tooltipped" id="decremento" data-position="left" data-delay="50" data-tooltip="Anterior">keyboard_arrow_left</i>
+                    <span id="mes"></span>
+                    de
+                    <span id="año"></span>
+                    <i class="material-icons right tooltipped" id="incremento" data-position="right" data-delay="50" data-tooltip="Siguiente">keyboard_arrow_right</i>
+                </h5>
+                <br/>
                 {% for obligation in obligations %}
-                    <div id="{{ obligation.id }}">
+                    <div id="{{ obligation.id }}" class="remover">
                         <ul class="collapsible" data-collapsible="accordion">
                             <li>
                                 <div class="collapsible-header">
@@ -24,7 +32,7 @@
                                     <a href="{% url 'obligations:update_obligation' obligation.id %}"><span><i class="material-icons right edit">mode_edit</i></span></a>
                                 </div>
                                 <div class="collapsible-body">
-                                    <p>Valor: {{ obligation.value_obligation|intcomma }}</p>
+                                    <p>Valor: $ {{ obligation.value_obligation|intcomma }}</p>
                                     <p>Cuenta: {{ obligation.account }}</p>
                                     <p>Tipo de obligación: {{ obligation.get_type_obligation_display }}</p>
                                     {% if obligation.completed %}
@@ -38,12 +46,26 @@
                         </ul>
                     </div>
                 {% empty %}
-                    <p>No hay obligaciones</p>
+                    <p class="remover">No hay obligaciones</p>
                 {% endfor %}
             </div>
+            {% include 'ajax_loader.html' %}
         </div>
-        <div class="fixed-action-btn">
-            <a class="btn-floating btn-large red" href="{% url 'obligations:create_obligation' %}"><i class="large material-icons">add</i></a>
+        <div class="fixed-action-btn toolbar" id="movil">
+            <a class="btn-floating btn-large red">
+                <i class="large material-icons">more_horiz</i>
+            </a>
+            <ul>
+                <li class="waves-effect waves-light"><a href="#"><i class="material-icons">filter_list</i></a></li>
+                <li class="waves-effect waves-light tooltipped" data-position="top" data-delay="50"  data-tooltip="Crear obligación"><a href="{% url 'obligations:create_obligation' %}" ><i class="material-icons">add</i></a></li>
+            </ul>
+        </div>
+        <div class="fixed-action-btn" id="desktop">
+            <a class="btn-floating btn-large red"><i class="large material-icons">more_horiz</i></a>
+            <ul>
+                <li><a class="btn-floating blue tooltipped" data-position="left" data-delay="50"  data-tooltip="Filtrar"><i class="material-icons">filter_list</i></a></li>
+                <li><a class="btn-floating green tooltipped" data-position="left" data-delay="50"  data-tooltip="Crear obligación" href="{% url 'obligations:create_obligation' %}"><i class="material-icons">add</i></a></li>
+            </ul>
         </div>
     </div>
 {% endblock content_main %}
@@ -51,34 +73,24 @@
     <script src="{% static 'bower_components/sweetalert/dist/sweetalert.min.js' %}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+            mostrar_fecha();
+            $('#loader').hide();
             $('ul.tabs').tabs();
             $('.eliminar').click(function () {
-            var id = $(this).attr("id");
-            console.log(id);
-            swal({
-                        title: "Estas seguro?",
-                        text: "¿ Deseas eliminar este tipo de ingreso ?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Si, borrarla!",
-                        closeOnConfirm: false
-            },
-                    function(){
-                        var div_deleted = 'div#' + id;
-                        var url_id = '/obligaciones/delete/' + id;
-                        console.log(div_deleted);
-                        $.ajax({
-                            url: url_id,
-                            type: 'get',
-                            success: function (data) {
-                                console.log(data);
-                                $(div_deleted).hide();
-                                swal("Deleted!", "La obligación se eliminó correctamente.", "success");
-                            }
-                        });
+                var text1, text2, model, id;
+                text1 = "¿ Deseas eliminar esta obligación ?";
+                text2 = "La obligación se eliminó correctamente.";
+                model = 'obligation';
+                id = $(this).attr("id");
+                console.log(id);
+                delete_object(text1, text2, id, model);
             });
-        });
+            $('#incremento').click(function () {
+                incremento_fecha('obligation');
+            });
+            $('#decremento').click(function () {
+                decremento_fecha('obligation');
+            });
         });
 
     </script>

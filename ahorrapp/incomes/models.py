@@ -1,7 +1,9 @@
 from django.db import models
 from django.core.validators import MaxValueValidator
 from users.models import UserProfile
-from .managers import AccountManager, TypeIncomeManager
+from .managers import (AccountManager,
+                       TypeIncomeManager,
+                       IcomeManager)
 
 
 class TimeStampedModel(models.Model):
@@ -59,6 +61,7 @@ class Income(TimeStampedModel):
     description = models.TextField(max_length=100, blank=True)
     user_profile = models.ForeignKey(UserProfile)
     type_income = models.ForeignKey(TypeIncome)
+    objects = IcomeManager()
 
     def __str__(self):
         return self.nombre_ingreso

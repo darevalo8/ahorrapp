@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{% static 'bower_components/sweetalert/dist/sweetalert.css' %}">
 {% endblock custom_style %}
 {% block content_main %}
-    <ul class="tabs">
+    <ul class="tabs tabs-fixed-width">
         <li class="tab col s3"><a href="{% url 'incomes:list_income' %}" target="_self">Mis ingresos</a></li>
         <li class="tab col s3"><a href="#" class="active">Tipos de ingreso</a></li>
     </ul>
@@ -44,32 +44,32 @@
             $('ul.tabs').tabs();
 
             $('.eliminar').click(function () {
-            var id = $(this).attr("id");
-            console.log(id);
-            swal({
-                        title: "¿Esta seguro?",
-                        text: "¿ Deseas eliminar este tipo de ingreso ?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Si, borrarla!",
-                        closeOnConfirm: false
-            },
-                    function(){
-                        var div_deleted = 'div#' + id;
-                        var url_id = '/cuentas/delete/type/' + id;
-                        console.log(div_deleted);
-                        $.ajax({
-                            url: url_id,
-                            type: 'get',
-                            success: function (data) {
-                                console.log(data);
-                                $(div_deleted).hide();
-                                swal("¡Eliminado!", "El tipo de ingreso se eliminó correctamente.", "success");
-                            }
-                        });
+                var id = $(this).attr("id");
+                console.log(id);
+                swal({
+                            title: "¿Esta seguro?",
+                            text: "¿ Deseas eliminar este tipo de ingreso ?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Si, borrarla!",
+                            closeOnConfirm: false
+                },
+                        function(){
+                            var div_deleted = 'div#' + id;
+                            var url_id = '/cuentas/delete/type/' + id;
+                            console.log(div_deleted);
+                            $.ajax({
+                                url: url_id,
+                                type: 'get',
+                                success: function (data) {
+                                    console.log(data);
+                                    $(div_deleted).hide();
+                                    swal("¡Eliminado!", "El tipo de ingreso se eliminó correctamente.", "success");
+                                }
+                            });
+                });
             });
-        });
         });
 
     </script>

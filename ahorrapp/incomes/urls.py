@@ -11,7 +11,9 @@ from .views import (AccountListView,
                     IncomeDeleteView,
                     TypeIncomeUpdateView,
                     TypeIncomeDeleteView,
-                    IncomesAjaxList
+                    IncomesAjaxList,
+                    IncomeGroup,
+                    IncomeAjaxGroup, IncomeTypeAjaxGroup
                     # Delete1
                     )
 urlpatterns = [
@@ -39,6 +41,15 @@ urlpatterns = [
     url(r'^consulta-ingreso/$',
         IncomesAjaxList.as_view(),
         name='ajax_list'),
+    url(r'^agrupar-ingresos/$',
+        IncomeGroup.as_view(),
+        name='agrupar_view'),
+    url(r'^group-account/$',
+        IncomeAjaxGroup.as_view(),
+        name='agrupar_ajax'),
+    url(r'^group-type/$',
+        IncomeTypeAjaxGroup.as_view(),
+        name='type_group_ajax'),
     url(r'^edit/ingreso/(?P<pk>\d+)/$',
         IncomeUpdateView.as_view(),
         name='update_income'),

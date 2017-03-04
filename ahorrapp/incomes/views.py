@@ -11,7 +11,10 @@ from .helpers import (BaseListView,
                       BaseUpdateView,
                       AjaxDeleteView,
                       AjaxListView,
-                      TypeListView)
+                      TypeListView,
+                      BaseGroupAccount,
+                      AjaxGroupAccountView,
+                      AjaxGroupTypeView)
 
 
 class AccountCreateView(LoginRequiredMixin, BaseCreateView):
@@ -93,6 +96,13 @@ class IncomeDeleteView(AccountDeleteView):
     model = Income
 
 
+class IncomesAjaxList(LoginRequiredMixin, AjaxListView):
+    moodel = Income
+
+
+# class IncomeTotalAccountView()
+
+
 class TypeIncomeCreateView(AccountCreateView):
     model = TypeIncome
     fields = ['tipo']
@@ -115,5 +125,15 @@ class TypeIncomeDeleteView(AccountDeleteView):
     model = TypeIncome
 
 
-class IncomesAjaxList(AjaxListView):
+class IncomeGroup(LoginRequiredMixin, BaseGroupAccount):
+    moodel = Income
+    template_name = 'incomes/income_group.html'
+    context_object_name = 'grupos'
+
+
+class IncomeAjaxGroup(LoginRequiredMixin, AjaxGroupAccountView):
+    moodel = Income
+
+
+class IncomeTypeAjaxGroup(AjaxGroupTypeView):
     moodel = Income

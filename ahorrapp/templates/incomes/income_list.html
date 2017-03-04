@@ -1,20 +1,19 @@
 {% extends 'base_list_modules.html' %}
 {% load staticfiles %}
 {% load humanize %}
-{% block title %}Mis Ingresos|Ahorra-app{% endblock title %}
+{% block title %}Mis Ingresos | Ahorra-app{% endblock title %}
 {% block custom_style %}
     <link rel="stylesheet" href="{% static 'bower_components/sweetalert/dist/sweetalert.css' %}">
 {% endblock custom_style %}
 {% block content_main %}
-    <ul class="tabs">
-        <li class="tab col s3"><a href="#" class="active">Mis ingresos</a></li>
+    <ul class="tabs tabs-fixed-width">
+        <li class="tab col s3 "><a href="#" >Mis ingresos</a></li>
         <li class="tab col s3"><a href="{% url 'incomes:list_type' %}" target="_self">Tipos de ingreso</a></li>
     </ul>
     <br>
     <div class="container">
         <div class="row">
-            <div class="col s12 m12 l12">
-
+            <div class="col s12 m12 l12" id="main">
                 <h5 class="center">
                     <i class="material-icons left tooltipped" id="decremento" data-position="left" data-delay="50" data-tooltip="Anterior">keyboard_arrow_left</i>
                     <span id="mes"></span>
@@ -24,7 +23,7 @@
                 </h5>
                 <br/>
                 {% for income in incomes %}
-                    <div id="{{ income.id }}">
+                    <div id="{{ income.id }}" class="remover">
                         <ul class="collapsible" data-collapsible="accordion">
                             <li>
                                 <div class="collapsible-header">
@@ -38,19 +37,33 @@
                                     <p>Cuenta: {{ income.account }}</p>
                                     <p>Tipo de ingreso: {{ income.type_income }}</p>
                                     <p>Descripción: {{ income.description }}</p>
+                                    <p>Creada el {{ income.created }}</p>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 {% empty %}
-                    <p>No hay ingresos</p>
-                    <p><b>NOTA:</b> Antes de crear un ingreso, primero debes de crear un tipo de ingreso :D</p>
+                    <p class="remover">No hay ingresos</p>
+                    <p class="remover"><b>NOTA:</b> Antes de crear un ingreso, primero debes de crear un tipo de ingreso :D</p>
                 {% endfor %}
-            {% include 'ajax_loader.html' %}
             </div>
+            {% include 'ajax_loader.html' %}
         </div>
-        <div class="fixed-action-btn">
-            <a class="btn-floating btn-large red" href="{% url 'incomes:create_income' %}"><i class="large material-icons">add</i></a>
+        <div class="fixed-action-btn toolbar" id="movil">
+            <a class="btn-floating btn-large red">
+                <i class="large material-icons">more_horiz</i>
+            </a>
+            <ul>
+                <li class="waves-effect waves-light"><a href="{% url 'incomes:agrupar_view' %}"><i class="material-icons">filter_list</i></a></li>
+                <li class="waves-effect waves-light tooltipped" data-position="top" data-delay="50"  data-tooltip="Crear Ingreso"><a href="{% url 'incomes:create_income' %}" ><i class="material-icons">add</i></a></li>
+            </ul>
+        </div>
+        <div class="fixed-action-btn" id="desktop">
+            <a class="btn-floating btn-large red"><i class="large material-icons">more_horiz</i></a>
+            <ul>
+                <li><a class="btn-floating blue tooltipped" data-position="left" data-delay="50"  data-tooltip="Filtrar" href="{% url 'incomes:agrupar_view' %}"><i class="material-icons">filter_list</i></a></li>
+                <li><a class="btn-floating green tooltipped" data-position="left" data-delay="50"  data-tooltip="Crear Ingreso" href="{% url 'incomes:create_income' %}"><i class="material-icons">add</i></a></li>
+            </ul>
         </div>
     </div>
 {% endblock content_main %}
@@ -62,48 +75,24 @@
             $('#loader').hide();
             $('ul.tabs').tabs();
             $('.eliminar').click(function () {
-            var id = $(this).attr("id");
-            console.log(id);
-            swal({
-                        title: "¿Esta seguro?",
-                        text: "¿ Deseas eliminar este tipo de ingreso ?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Si, borrarla!",
-                        closeOnConfirm: false
-            },
-                    function(){
-                        var div_deleted = 'div#' + id;
-                        var url_id = '/cuentas/delete/ingreso/' + id;
-                        console.log(div_deleted);
-                        $.ajax({
-                            url: url_id,
-                            type: 'get',
-                            success: function (data) {
-                                console.log(data);
-                                $(div_deleted).hide();
-                                swal("¡Eliminado!", "El ingreso se eliminó correctamente.", "success");
-                            }
-                        });
-                });
+                var text1, text2, model, id;
+                text1 = "¿ Deseas eliminar este ingreso ?";
+                text2 = "El ingreso se eliminó correctamente.";
+                model = 'income';
+                id = $(this).attr("id");
+                console.log(id);
+                delete_object(text1, text2, id, model);
+            });
+            $('#incremento').click(function () {
+                incremento_fecha('income');
+            });
+            $('#decremento').click(function () {
+                decremento_fecha('income');
             });
             
         });
-
-        function consulta(mes, year) {
-            mes +=1;
-            console.log(mes, year);
-            $.ajax({
-                data: {'mes': mes, 'year': year},
-                url: '/cuentas/consulta-ingreso/',
-                type: 'get',
-                success: function (data) {
-                    console.log(data);
-                }
-
-            });
-        }
-
+{#        var model = 'income';#}
+{#        document.getElementById('incremento').addEventListener('click', incremento_fecha);#}
+{#        document.getElementById('decremento').addEventListener('click', decremento_fecha);#}
     </script>
 {% endblock custom_js %}

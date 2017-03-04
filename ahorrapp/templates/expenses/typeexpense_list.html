@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{% static 'bower_components/sweetalert/dist/sweetalert.css' %}">
 {% endblock custom_style %}
 {% block content_main %}
-    <ul class="tabs">
+    <ul class="tabs tabs-fixed-width">
         <li class="tab col s3"><a href="{% url 'expenses:list_expense' %}" target="_self">Mis gastos</a></li>
         <li class="tab col s3"><a href="#" class="active">Tipos de gasto</a></li>
     </ul>
@@ -43,32 +43,32 @@
         $(document).ready(function(){
             $('ul.tabs').tabs();
             $('.eliminar').click(function () {
-            var id = $(this).attr("id");
-            console.log(id);
-            swal({
-                        title: "¿Esta seguro?",
-                        text: "¿ Deseas eliminar este tipo de gasto ?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Si, borrar!",
-                        closeOnConfirm: false
-            },
-                    function(){
-                        var div_deleted = 'div#' + id;
-                        var url_id = '/gastos/delete/type-expense/' + id;
-                        console.log(div_deleted);
-                        $.ajax({
-                            url: url_id,
-                            type: 'get',
-                            success: function (data) {
-                                console.log(data);
-                                $(div_deleted).hide();
-                                swal("¡Eliminado!", "El tipo de gasto se eliminó correctamente.", "success");
-                            }
-                        });
+                var id = $(this).attr("id");
+                console.log(id);
+                swal({
+                            title: "¿Esta seguro?",
+                            text: "¿ Deseas eliminar este tipo de gasto ?",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Si, borrar!",
+                            closeOnConfirm: false
+                },
+                        function(){
+                            var div_deleted = 'div#' + id;
+                            var url_id = '/gastos/delete/type-expense/' + id;
+                            console.log(div_deleted);
+                            $.ajax({
+                                url: url_id,
+                                type: 'get',
+                                success: function (data) {
+                                    console.log(data);
+                                    $(div_deleted).hide();
+                                    swal("¡Eliminado!", "El tipo de gasto se eliminó correctamente.", "success");
+                                }
+                            });
+                });
             });
-        });
         });
 
     </script>

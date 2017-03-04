@@ -1,21 +1,29 @@
-{% extends 'dashboard/base_dashboard.html' %}
+{% extends 'base_list_modules.html' %}
 {% load staticfiles %}
 {% load humanize %}
-{% block title %}Mis Gastos|Ahorra-app{% endblock title %}
+{% block title %}Mis Gastos | Ahorra-app{% endblock title %}
 {% block custom_style %}
     <link rel="stylesheet" href="{% static 'bower_components/sweetalert/dist/sweetalert.css' %}">
 {% endblock custom_style %}
 {% block content_main %}
-    <ul class="tabs">
+    <ul class="tabs tabs-fixed-width">
         <li class="tab col s3"><a href="#" class="active">Mis gastos</a></li>
         <li class="tab col s3"><a href="{% url 'expenses:list_typeexpense' %}" target="_self">Tipos de gasto</a></li>
     </ul>
     <br>
     <div class="container">
         <div class="row">
-            <div class="col s12 m12 l12">
+            <div class="col s12 m12 l12" id="main">
+                <h5 class="center">
+                    <i class="material-icons left tooltipped" id="decremento" data-position="left" data-delay="50" data-tooltip="Anterior">keyboard_arrow_left</i>
+                    <span id="mes"></span>
+                    de
+                    <span id="año"></span>
+                    <i class="material-icons right tooltipped" id="incremento" data-position="right" data-delay="50" data-tooltip="Siguiente">keyboard_arrow_right</i>
+                </h5>
+                <br/>
                 {% for expense in expenses %}
-                    <div id="{{ expense.id }}">
+                    <div id="{{ expense.id }}" class="remover">
                         <ul class="collapsible" data-collapsible="accordion">
                             <li>
                                 <div class="collapsible-header">
@@ -35,13 +43,31 @@
                         </ul>
                     </div>
                 {% empty %}
-                    <p>No hay gastos</p>
-                    <p><b>NOTA:</b> Antes de crear un gasto, primero debes de crear un tipo de gasto :D</p>
+                    <p class="remover">No hay gastos</p>
+                    <p class="remover"><b>NOTA:</b> Antes de crear un gasto, primero debes de crear un tipo de gasto :D</p>
                 {% endfor %}
             </div>
+            {% include 'ajax_loader.html' %}
         </div>
-        <div class="fixed-action-btn">
-            <a class="btn-floating btn-large red" href="{% url 'expenses:create_expense' %}"><i class="large material-icons">add</i></a>
+        <div class="fixed-action-btn toolbar" id="movil">
+            <a class="btn-floating btn-large red">
+                <i class="large material-icons">more_horiz</i>
+            </a>
+            <ul>
+                <li class="waves-effect waves-light"><a href="{% url 'expenses:group-expense' %}"><i class="material-icons">filter_list</i></a></li>
+                <li class="waves-effect waves-light tooltipped" data-position="top" data-delay="50"  data-tooltip="Crear obligación">
+                    <a href="{% url 'expenses:create_expense' %}" ><i class="material-icons">add</i></a>
+                </li>
+            </ul>
+        </div>
+        <div class="fixed-action-btn" id="desktop">
+            <a class="btn-floating btn-large red"><i class="large material-icons">more_horiz</i></a>
+            <ul>
+                <li><a class="btn-floating blue tooltipped" href="{% url 'expenses:group-expense' %}" data-position="left" data-delay="50"  data-tooltip="Filtrar"><i class="material-icons">filter_list</i></a></li>
+                <li>
+                    <a class="btn-floating green tooltipped" data-position="left" data-delay="50"  data-tooltip="Crear obligación" href="{% url 'expenses:create_expense' %}"><i class="material-icons">add</i></a>
+                </li>
+            </ul>
         </div>
     </div>
 {% endblock content_main %}
@@ -49,34 +75,24 @@
     <script src="{% static 'bower_components/sweetalert/dist/sweetalert.min.js' %}"></script>
     <script type="text/javascript">
         $(document).ready(function(){
+            mostrar_fecha();
+            $('#loader').hide();
             $('ul.tabs').tabs();
             $('.eliminar').click(function () {
-            var id = $(this).attr("id");
-            console.log(id);
-            swal({
-                        title: "Estas seguro?",
-                        text: "¿ Deseas eliminar este tipo de ingreso ?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Si, borrarla!",
-                        closeOnConfirm: false
-            },
-                    function(){
-                        var div_deleted = 'div#' + id;
-                        var url_id = '/gastos/delete/' + id;
-                        console.log(div_deleted);
-                        $.ajax({
-                            url: url_id,
-                            type: 'get',
-                            success: function (data) {
-                                console.log(data);
-                                $(div_deleted).hide();
-                                swal("Deleted!", "El gasto se eliminó correctamente.", "success");
-                            }
-                        });
+                var text1, text2, model, id;
+                text1 = "¿ Deseas eliminar este gasto ?";
+                text2 = "El gasto se eliminó correctamente.";
+                model = 'expense';
+                id = $(this).attr("id");
+                console.log(id);
+                delete_object(text1, text2, id, model);
             });
-        });
+            $('#incremento').click(function () {
+                incremento_fecha('expense');
+            });
+            $('#decremento').click(function () {
+                decremento_fecha('expense');
+            });
         });
 
     </script>
